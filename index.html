@@ -227,6 +227,10 @@
   .product-links { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; padding-top: 4px; }
   .product-links a { color: var(--accent); font-size: .93rem; font-weight: 500; text-decoration: none; border-bottom: 1px solid transparent; }
   .product-links a:hover { border-bottom-color: var(--accent); }
+  .fineprint { font-size: .85rem; color: var(--ink-3); line-height: 1.55; max-width: 46ch; }
+  .fineprint a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+  .fineprint a:hover { border-bottom-color: var(--accent); }
+
   .pill {
     font-family: "JetBrains Mono", monospace;
     font-size: .7rem;
@@ -470,9 +474,15 @@
           </div>
 
           <div class="product-links reveal">
-            <span class="pill">Coming to Google Play</span>
-            <a href="https://solidexile.github.io/pathkeeper-privacy/">Privacy policy</a>
+            <a class="btn" href="https://github.com/Solidexile/Solidexile.github.io/releases/download/v1.0.0/pathkeeper-v1.0.0.apk">Download the beta</a>
+            <span class="pill">Android 7+ &middot; 50 MB</span>
           </div>
+          <p class="fineprint reveal">
+            Direct download while we finish Google Play review. Android will warn you about
+            installing outside the Play Store &mdash; that warning appears for any app not yet
+            listed, and you can allow it for your browser just this once.
+            <a href="https://solidexile.github.io/pathkeeper-privacy/">Privacy policy</a>
+          </p>
         </div>
 
         <div class="shots reveal">
