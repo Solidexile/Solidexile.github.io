@@ -229,6 +229,47 @@
      and paints the button's label the same green as its own background. */
   .product-links a:not(.btn) { color: var(--accent); font-size: .93rem; font-weight: 500; text-decoration: none; border-bottom: 1px solid transparent; }
   .product-links a:not(.btn):hover { border-bottom-color: var(--accent); }
+  .install {
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 4px;
+    padding: 22px 24px;
+    background: var(--surface);
+    border: 1px solid var(--line-2);
+    border-left: 3px solid var(--accent);
+    border-radius: 12px;
+    max-width: 52ch;
+  }
+  .install.show { display: flex; }
+  .install-lead { color: var(--ink-2); font-size: .95rem; }
+  .steps-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--ink-2);
+    font-size: .93rem;
+    line-height: 1.5;
+  }
+  .steps-list li::marker { color: var(--accent); font-weight: 700; }
+  .steps-list strong { color: var(--ink); font-weight: 600; }
+  .install-note { font-size: .85rem; color: var(--ink-3); }
+  .install-note a { color: var(--accent); }
+
+  .linkish {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    color: var(--accent);
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+  }
+  .linkish:hover { border-bottom-color: var(--accent); }
+
   .fineprint { font-size: .85rem; color: var(--ink-3); line-height: 1.55; max-width: 46ch; }
   .fineprint a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
   .fineprint a:hover { border-bottom-color: var(--accent); }
@@ -481,11 +522,33 @@
             <span class="pill">Android 7+ &middot; 50 MB</span>
           </div>
           <p class="fineprint reveal">
-            Direct download while we finish Google Play review. Android will warn you about
-            installing outside the Play Store &mdash; that warning appears for any app not yet
-            listed, and you can allow it for your browser just this once.
+            Direct download while PathKeeper finishes Google Play review.
+            <button class="linkish" type="button" id="install-toggle">How to install</button>
+            &middot;
             <a href="https://solidexile.github.io/pathkeeper-privacy/">Privacy policy</a>
           </p>
+
+          <!-- Revealed automatically when the download starts. People abandon at
+               the security prompts because nothing tells them the prompts are
+               expected, so the steps appear at exactly the moment they hit them. -->
+          <div class="install" id="install">
+            <p class="install-lead">
+              Android shows two warnings for any app not installed from the Play Store. They are
+              expected here &mdash; PathKeeper is not on Play yet. Here is what you will see:
+            </p>
+            <ol class="steps-list">
+              <li><strong>&ldquo;This type of file can harm your device&rdquo;</strong> &mdash; tap <strong>Download anyway</strong>.</li>
+              <li>Open the downloaded file, from the notification or your <strong>Downloads</strong> folder.</li>
+              <li><strong>&ldquo;For your security, you can't install unknown apps from this source&rdquo;</strong> &mdash; tap <strong>Settings</strong>, turn on <strong>Allow from this source</strong>, then press back.</li>
+              <li>Tap <strong>Install</strong>.</li>
+              <li>If Play Protect says <strong>&ldquo;unsafe app blocked&rdquo;</strong> or offers to scan, choose <strong>More details</strong> &rarr; <strong>Install anyway</strong>.</li>
+              <li>Open PathKeeper. Nothing else is needed &mdash; there is no account to make.</li>
+            </ol>
+            <p class="install-note">
+              Wording varies a little by phone; Samsung says &ldquo;Install unknown apps&rdquo;. Stuck on any
+              step? Send a screenshot to <a href="mailto:hwmoubarak@gmail.com">hwmoubarak@gmail.com</a>.
+            </p>
+          </div>
         </div>
 
         <div class="shots reveal">
@@ -627,6 +690,39 @@
       grid.classList.remove("lit");
       cell.classList.remove("lit");
     });
+  })();
+
+  /* Install steps. Shown automatically the moment the download starts, because
+     that is when the security prompts appear and when people give up. */
+  (function () {
+    var panel = document.getElementById("install");
+    var toggle = document.getElementById("install-toggle");
+    var download = document.querySelector('a.btn[href*=".apk"]');
+    if (!panel) return;
+
+    function show() {
+      panel.classList.add("show");
+    }
+
+    if (download) {
+      download.addEventListener("click", function () {
+        show();
+        // The click also starts the download, so give the browser a moment
+        // before moving the page under the user's finger.
+        setTimeout(function () {
+          panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }, 350);
+      });
+    }
+
+    if (toggle) {
+      toggle.addEventListener("click", function () {
+        panel.classList.toggle("show");
+        if (panel.classList.contains("show")) {
+          panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+      });
+    }
   })();
 </script>
 </body>
