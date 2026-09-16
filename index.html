@@ -277,6 +277,11 @@
   }
   .linkish:hover { border-bottom-color: var(--accent); }
 
+  .sitestats {
+    font-size: .85rem; color: var(--ink-3); margin-top: .55rem;
+    font-family: "JetBrains Mono", ui-monospace, monospace; letter-spacing: .02em;
+  }
+  .sitestats b { color: var(--ink-2); font-weight: 600; }
   .fineprint { font-size: .85rem; color: var(--ink-3); line-height: 1.55; max-width: 46ch; }
   .fineprint a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
   .fineprint a:hover { border-bottom-color: var(--accent); }
@@ -534,6 +539,10 @@
             <a class="btn" href="https://github.com/Solidexile/Solidexile.github.io/releases/download/V1.0.0/pathkeeper-v1.0.0.apk">Download the beta</a>
             <span class="pill">Android 7+ &middot; 50 MB</span>
           </div>
+          <!-- Filled in by the counter script. Starts empty and stays empty if
+               either source is unreachable, so a failed fetch shows nothing
+               rather than a broken "0 downloads". -->
+          <p class="sitestats reveal" id="sitestats" hidden></p>
           <p class="fineprint reveal">
             Direct download while PathKeeper finishes Google Play review.
             <button class="linkish" type="button" id="install-toggle">How to install</button>
@@ -591,8 +600,9 @@
         <div class="principle reveal">
           <h3>Your data stays yours</h3>
           <p>
-            Local-first wherever it is possible. No analytics you didn't ask for, no third-party
-            SDKs quietly collecting in the background.
+            Local-first wherever it is possible. No third-party SDKs, no cookies, no profiles.
+            This site counts page views and download clicks on our own server &mdash; a timestamp
+            and nothing that identifies you.
           </p>
         </div>
         <div class="principle reveal">
@@ -737,6 +747,72 @@
       });
     }
   })();
+</script>
+
+<script>
+/* Site counter.
+   Downloads come from GitHub's release API, which is public and CORS-enabled,
+   so that number is live with no server of ours involved and no tracking.
+   Visits come from our own Apps Script (publish/site/site-counter.gs) -- no
+   third party, no cookie, nothing stored that identifies anyone.
+   Until COUNTER_ENDPOINT is filled in, the visit half simply does not run. */
+(function () {
+  var COUNTER_ENDPOINT = "";   // paste the Apps Script /exec URL here
+  var RELEASES = "https://api.github.com/repos/Solidexile/Solidexile.github.io/releases";
+
+  var el = document.getElementById("sitestats");
+  if (!el) return;
+  var downloads = null, views = null;
+
+  function paint() {
+    var bits = [];
+    if (downloads !== null) bits.push("<b>" + downloads.toLocaleString() + "</b> downloads");
+    if (views !== null) bits.push("<b>" + views.toLocaleString() + "</b> visits");
+    if (!bits.length) return;
+    el.innerHTML = bits.join(" &middot; ");
+    el.hidden = false;
+  }
+
+  fetch(RELEASES, {headers: {Accept: "application/vnd.github+json"}})
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function (rs) {
+      var n = 0;
+      rs.forEach(function (rel) {
+        (rel.assets || []).forEach(function (a) { n += a.download_count || 0; });
+      });
+      downloads = n; paint();
+    })
+    .catch(function () { /* leave the download half out rather than show a wrong 0 */ });
+
+  if (COUNTER_ENDPOINT) {
+    try {
+      navigator.sendBeacon(COUNTER_ENDPOINT, new Blob(
+        [JSON.stringify({
+          event: "view",
+          path: location.pathname,
+          ref: document.referrer ? new URL(document.referrer).hostname : ""
+        })],
+        {type: "text/plain;charset=UTF-8"}
+      ));
+    } catch (e) {}
+
+    fetch(COUNTER_ENDPOINT + "?format=json")
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function (d) { views = d.views; paint(); })
+      .catch(function () {});
+
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest('a[href*=".apk"]');
+      if (!a) return;
+      try {
+        navigator.sendBeacon(COUNTER_ENDPOINT, new Blob(
+          [JSON.stringify({event: "download_click", path: location.pathname, ref: ""})],
+          {type: "text/plain;charset=UTF-8"}
+        ));
+      } catch (err) {}
+    }, true);
+  }
+})();
 </script>
 </body>
 </html>
