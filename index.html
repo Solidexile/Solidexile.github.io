@@ -105,6 +105,13 @@
   }
   nav a:hover, nav a:focus-visible { color: var(--ink); }
   @media (max-width: 640px) { nav .hide-sm { display: none; } }
+  /* Touch targets. These are the two links people actually need on a phone --
+     the install help and the privacy policy -- and both were under 25px tall,
+     well below the ~44px a fingertip reliably hits. */
+  @media (max-width: 640px) {
+    .fineprint a, .foot a, a.quiet-link,
+    .fineprint .linkish { display: inline-block; padding-block: 10px; }
+  }
 
   .btn {
     display: inline-flex;
@@ -370,6 +377,12 @@
      dragged. Two layers at different speeds and opacities give it depth, and
      the reversed second layer means the crossing point keeps moving. */
   .bg-waves { top: auto; height: clamp(240px, 38vh, 480px); overflow: hidden; }
+  /* On a phone 38vh is over a third of the screen, which reads as a heavy bar
+     across the bottom rather than as background. Scale it back so it stays
+     texture at the size most people actually see the site at. */
+  @media (max-width: 640px) {
+    .bg-waves { height: clamp(120px, 18vh, 190px); }
+  }
   .bg-waves svg { position: absolute; bottom: 0; left: 0; width: 240%; height: 100%; }
   .bg-waves path { will-change: transform; }
   .wave-a { fill: rgba(61, 220, 151, .034); animation: drift 26s linear infinite; }
