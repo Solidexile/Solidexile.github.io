@@ -757,17 +757,25 @@
    third party, no cookie, nothing stored that identifies anyone.
    Until COUNTER_ENDPOINT is filled in, the visit half simply does not run. */
 (function () {
-  var COUNTER_ENDPOINT = "";   // paste the Apps Script /exec URL here
+  var COUNTER_ENDPOINT = "https://script.google.com/macros/s/AKfycbxiRqsqKGZmSmMr-FFEg6ozBA0KOImApa_RF-KjYS4h6Kr8NykobY-nK-AH9VK1WJhU7Q/exec";
   var RELEASES = "https://api.github.com/repos/Solidexile/Solidexile.github.io/releases";
 
   var el = document.getElementById("sitestats");
   if (!el) return;
   var downloads = null, views = null;
 
+  // Don't count local previews, or every build-and-check inflates the number.
+  var isLocal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)
+             || location.protocol === "file:";
+
+  function plural(n, one, many) {
+    return "<b>" + n.toLocaleString() + "</b> " + (n === 1 ? one : many);
+  }
+
   function paint() {
     var bits = [];
-    if (downloads !== null) bits.push("<b>" + downloads.toLocaleString() + "</b> downloads");
-    if (views !== null) bits.push("<b>" + views.toLocaleString() + "</b> visits");
+    if (downloads !== null) bits.push(plural(downloads, "download", "downloads"));
+    if (views !== null) bits.push(plural(views, "visit", "visits"));
     if (!bits.length) return;
     el.innerHTML = bits.join(" &middot; ");
     el.hidden = false;
@@ -786,7 +794,7 @@
 
   if (COUNTER_ENDPOINT) {
     try {
-      navigator.sendBeacon(COUNTER_ENDPOINT, new Blob(
+      if (!isLocal) navigator.sendBeacon(COUNTER_ENDPOINT, new Blob(
         [JSON.stringify({
           event: "view",
           path: location.pathname,
@@ -803,7 +811,7 @@
 
     document.addEventListener("click", function (e) {
       var a = e.target.closest && e.target.closest('a[href*=".apk"]');
-      if (!a) return;
+      if (!a || isLocal) return;
       try {
         navigator.sendBeacon(COUNTER_ENDPOINT, new Blob(
           [JSON.stringify({event: "download_click", path: location.pathname, ref: ""})],
