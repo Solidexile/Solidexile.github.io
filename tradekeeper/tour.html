@@ -630,10 +630,18 @@ function text(){ const [h, pts] = T[LANG].ch[cur];
   $$('#dots button').forEach((d,i)=>{ d.classList.toggle('on', i===cur); }); }
 
 /* ---------- voice: plays once each time a chapter is opened ---------- */
-const src = (n, l=LANG) => `audio/${l}-${String(n).padStart(2,'0')}.mp3`;
+// ?v=<version> from the site's build is passed on to the voice files, so a
+// re-published voice is fetched fresh instead of replayed from the cache
+const VER = q.get('v') ? `?v=${q.get('v')}` : '';
+const src = (n, l=LANG) => `audio/${l}-${String(n).padStart(2,'0')}.mp3${VER}`;
 function speak(){ vo.pause(); $('#vbar').style.width='0';
   if (VIDEO || !soundOn || !started) return;
-  vo.src = src(cur+1); vo.currentTime = 0; vo.play().catch(()=>{}); }
+  retried = false; vo.src = src(cur+1); vo.currentTime = 0; vo.play().catch(()=>{}); }
+/* a voice file that fails to load (e.g. a host hiccup right after publishing,
+   or a cached error) gets one fresh retry, bypassing the browser cache */
+let retried = false;
+vo.addEventListener('error', ()=>{ if (retried || VIDEO || !soundOn) return; retried = true;
+  const s = src(cur+1); vo.src = s + (s.includes('?') ? '&' : '?') + 'r=' + Date.now(); vo.play().catch(()=>{}); });
 vo.addEventListener('timeupdate', ()=>{ if(vo.duration) $('#vbar').style.width = (vo.currentTime/vo.duration*100)+'%'; });
 /* when a chapter's voice finishes, carry on to the next one by itself, so the
    tour plays through like a presentation; arrows/dots still skip around */
