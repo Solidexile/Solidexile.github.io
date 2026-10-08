@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TradeKeeper — guided tour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Cairo:wght@400;600;700;800&display=swap">
+<style>
+  /* ============================================================
+     TradeKeeper guided tour.
+     One page, three uses:
+       - embedded on the Solidify site (iframe): arrows, dots, a
+         voiceover that plays once each time a chapter is opened;
+       - ?lang=ar for the Arabic version (RTL, Arabic voice);
+       - ?video=1&lang=xx&d=<durations>: the 5-8 minute explainer,
+         every chapter back to back at 1920x1080, recorded silent
+         and muxed with the same voice files afterwards.
+     The app screens are live HTML (crisp at any size), each one a
+     short loop that repeats while its chapter is open.
+     ============================================================ */
+  :root{
+    --blue:#4DA3FF; --blue-d:#2166ac; --blue-l:#8fc6ff; --wash:rgba(77,163,255,.10);
+    --ground:#0b1120; --ground2:#0e1526; --surf:#16203a; --line:#2b3a5c;
+    --ink:#eef3fb; --ink2:#a7b7d2; --ink3:#7589aa;
+    --good:#34d399; --amber:#f5b042; --bad:#ff6b6b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--ground);color:var(--ink);font-family:"Public Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body.ar{font-family:"Cairo","Public Sans",sans-serif}
+  h2,h3,.wm{font-family:Archivo,"Public Sans",sans-serif}
+  body.ar h2, body.ar h3{font-family:"Cairo",sans-serif}
+
+  /* ---------- layout (website) ---------- */
+  .tour{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:22px;align-items:stretch;padding:4px}
+  @media (max-width:860px){ .tour{grid-template-columns:1fr} }
+  .screen{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);
+    background:radial-gradient(900px 520px at 70% -10%, rgba(77,163,255,.16), transparent 60%), var(--ground2);
+    aspect-ratio:16/9;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+  #stage{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0}
+  .arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:20;width:46px;height:46px;border-radius:50%;
+    border:1px solid rgba(143,198,255,.35);background:rgba(11,17,32,.72);color:#fff;font-size:22px;cursor:pointer;
+    display:grid;place-items:center;backdrop-filter:blur(6px);transition:background .2s, transform .2s}
+  .arrow:hover{background:var(--blue);color:#06244a}
+  .arrow:active{transform:translateY(-50%) scale(.94)}
+  .arrow.prev{left:12px} .arrow.next{right:12px}
+  body.ar .arrow.prev{left:auto;right:12px} body.ar .arrow.next{right:auto;left:12px}
+
+  .panel{display:flex;flex-direction:column;gap:16px;padding:22px 24px;border-radius:18px;border:1px solid var(--line);background:linear-gradient(180deg,#121b31,#0e1628)}
+  .topline{display:flex;align-items:center;gap:10px;justify-content:space-between}
+  .count{font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:.14em;color:var(--blue)}
+  .langs{display:flex;gap:6px}
+  .langs button{font:600 13px/1 "Public Sans",sans-serif;padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink2);cursor:pointer}
+  .langs button[lang=ar]{font-family:Cairo,sans-serif}
+  .langs button.on{background:var(--blue);border-color:var(--blue);color:#06244a}
+  .panel h3{font-size:clamp(1.35rem,2.4vw,1.9rem);line-height:1.15;letter-spacing:-.02em}
+  .panel ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+  .panel li{display:flex;gap:11px;color:var(--ink2);font-size:1rem;line-height:1.45}
+  .panel li::before{content:"";flex:none;width:8px;height:8px;margin-top:.55em;border-radius:50%;background:var(--blue);box-shadow:0 0 0 4px var(--wash)}
+  .panel .fade{animation:pIn .5s ease both}
+  @keyframes pIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .voice{margin-top:auto;display:flex;align-items:center;gap:12px}
+  .voice button{flex:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:#16203a;color:var(--ink);cursor:pointer;font-size:16px}
+  .voice button.on{background:var(--blue);color:#06244a;border-color:var(--blue)}
+  .bar{flex:1;height:4px;border-radius:4px;background:#1d2a48;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--blue)}
+  .dots{display:flex;gap:7px;flex-wrap:wrap}
+  .dots button{width:26px;height:6px;border-radius:6px;border:0;background:#24324f;cursor:pointer;padding:0}
+  .dots button.on{background:var(--blue)}
+  .dots button.seen{background:#3a5f91}
+  .start{position:absolute;inset:0;z-index:30;display:grid;place-items:center;background:rgba(6,10,20,.55);backdrop-filter:blur(2px);cursor:pointer;border:0;color:inherit}
+  .start span{display:inline-flex;align-items:center;gap:12px;padding:15px 26px;border-radius:999px;background:var(--blue);color:#06244a;font:800 18px/1 Archivo,sans-serif;box-shadow:0 18px 50px rgba(77,163,255,.45)}
+  body.ar .start span{font-family:Cairo,sans-serif}
+  .start.gone{display:none}
+
+  /* ---------- video mode: 1920x1080, panel on the side ---------- */
+  body.video{overflow:hidden;width:1920px;height:1080px}
+  body.video .tour{display:block;padding:0}
+  body.video .screen{position:absolute;right:60px;top:200px;width:1200px;height:675px;aspect-ratio:auto;border-radius:22px}
+  body.video .panel{position:absolute;left:64px;top:200px;width:540px;height:675px;border:0;background:none;padding:10px 0;gap:26px}
+  body.ar.video .screen{right:auto;left:60px} body.ar.video .panel{left:auto;right:64px}
+  body.video .panel h3{font-size:54px}
+  body.video .panel li{font-size:27px;gap:16px}
+  body.video .panel li::before{width:11px;height:11px}
+  body.video .count{font-size:20px}
+  body.video .arrow, body.video .langs, body.video .voice button, body.video .start{display:none}
+  body.video .dots button{width:40px;height:7px}
+  .vhead{display:none}
+  body.video .vhead{display:flex;position:absolute;left:64px;right:64px;top:62px;align-items:center;justify-content:space-between}
+  .wm{font-weight:800;letter-spacing:-.03em;font-size:40px;direction:ltr}
+  .wm .t{color:var(--blue)}
+  .vhead .chap{font-size:22px;color:var(--ink3);letter-spacing:.2em;text-transform:uppercase}
+  body.ar .vhead .chap{letter-spacing:0}
+  .card{position:absolute;inset:0;z-index:50;display:none;place-items:center;text-align:center;
+    background:radial-gradient(1100px 700px at 50% 44%, rgba(77,163,255,.22), transparent 62%), var(--ground)}
+  .card.on{display:grid}
+  .card .wm{font-size:150px}
+  .card .sub{margin-top:26px;font-size:42px;color:var(--ink2);font-weight:600}
+  .card .cta{display:inline-block;margin-top:44px;padding:20px 44px;border-radius:999px;background:var(--blue);color:#06244a;font:900 40px/1 Archivo,sans-serif}
+  body.ar .card .cta{font-family:Cairo,sans-serif}
+  .card .contact{margin-top:26px;font-size:30px;color:var(--blue-l);direction:ltr}
+  .card.on .wm{animation:slam .9s cubic-bezier(.16,1,.3,1) both}
+  .card.on .sub,.card.on .cta,.card.on .contact{animation:pIn .7s ease .5s both}
+  @keyframes slam{from{opacity:0;transform:scale(.88);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+
+  /* ============ the 1280x720 stage: live app screens ============ */
+  .scene{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .45s, visibility .45s;direction:ltr;font-family:"Public Sans",sans-serif}
+  .scene.active{opacity:1;visibility:visible}
+  .ui{position:absolute;left:50px;top:42px;right:50px;bottom:42px;background:linear-gradient(180deg,#16203a,#111a30);border:1px solid var(--line);
+    border-radius:18px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.5)}
+  .ui .top{height:58px;display:flex;align-items:center;gap:12px;padding:0 22px;border-bottom:1px solid var(--line);background:#101a30}
+  .ui .brand{font:800 21px Archivo,sans-serif}.ui .brand .t{color:var(--blue)}
+  .chip{font-size:14px;padding:6px 13px;border-radius:999px;background:#1b2745;color:var(--ink2);white-space:nowrap}
+  .chip.live{background:rgba(52,211,153,.16);color:var(--good)}
+  .chip.warn{background:rgba(245,176,66,.15);color:var(--amber)}
+  .chip.r{margin-left:auto}
+  .mono{font-family:"JetBrains Mono",monospace}
+  .cursor{position:absolute;z-index:40;width:34px;height:34px;left:640px;top:360px;opacity:0;pointer-events:none;
+    transition:left .65s cubic-bezier(.3,.7,.3,1), top .65s cubic-bezier(.3,.7,.3,1), opacity .25s}
+  .cursor.on{opacity:1}
+  .cursor svg{filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
+  .cursor .ring{position:absolute;left:2px;top:2px;width:40px;height:40px;border-radius:50%;border:3px solid var(--blue);opacity:0}
+  .cursor.tap .ring{animation:ring .45s ease}
+  @keyframes ring{from{opacity:.9;transform:scale(.2)}to{opacity:0;transform:scale(1.3)}}
+  .pop{animation:popIn .45s cubic-bezier(.2,1.5,.4,1) both}
+  @keyframes popIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+  .rin{animation:rowIn .45s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes rowIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
+  .hide{visibility:hidden}
+
+  /* 01 overview dashboard */
+  .dash{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:22px}
+  .kpi{background:#111c34;border:1px solid var(--line);border-radius:14px;padding:18px}
+  .kpi .l{font-size:15px;color:var(--ink2)} .kpi .n{font:800 30px "JetBrains Mono",monospace;margin-top:6px}
+  .kpi .n.g{color:var(--good)}
+  .chart{grid-column:1/-1;height:200px;background:#0f1830;border:1px solid var(--line);border-radius:14px;position:relative;overflow:hidden}
+  .chart svg{position:absolute;inset:0;width:100%;height:100%}
+  .chart .ln{fill:none;stroke:var(--blue);stroke-width:4;stroke-dasharray:2600;stroke-dashoffset:2600}
+  .chart.draw .ln{animation:draw 1.8s ease forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .mods{grid-column:1/-1;display:flex;gap:12px}
+  .mod{flex:1;display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:12px;background:#13213d;border:1px solid var(--line);font-weight:700;font-size:17px}
+  .mod i{font-style:normal;font-size:20px}
+
+  /* 02 setup */
+  .setup{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:24px}
+  .box{background:#111c34;border:1px solid var(--line);border-radius:14px;padding:20px}
+  .box h4{font:700 18px Archivo,sans-serif;margin-bottom:14px}
+  .fld{margin-bottom:12px}.fld .l{font-size:13px;color:var(--ink3);margin-bottom:6px}
+  .fld .v{background:#0f1830;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:17px;min-height:46px}
+  .caret::after{content:"|";color:var(--blue);animation:blink 1s steps(1) infinite;margin-left:1px}
+  @keyframes blink{50%{opacity:0}}
+  .usr{display:flex;align-items:center;gap:12px;padding:11px 4px;border-bottom:1px solid #1b2742}
+  .av{width:38px;height:38px;border-radius:50%;background:#1A5088;display:grid;place-items:center;font-weight:700;font-size:14px;color:#cfe4ff;flex:none}
+  .usr .nm{font-weight:600;font-size:16px}.usr .nm small{display:block;color:var(--ink3);font-weight:400;font-size:13px}
+  .perms{margin-left:auto;display:flex;gap:6px}
+  .perm{font-size:12px;padding:5px 9px;border-radius:7px;background:#1b2745;color:var(--ink3);transition:all .3s}
+  .perm.on{background:rgba(77,163,255,.2);color:var(--blue-l)}
+  .langrow{display:flex;gap:8px;margin-top:14px}
+  .lg{padding:8px 14px;border-radius:9px;background:#1b2745;color:var(--ink2);font-weight:700;font-size:15px;transition:all .3s}
+  .lg.on{background:var(--blue);color:#06244a}
+  .swatches{display:flex;gap:10px;margin-top:12px}
+  .sw{width:30px;height:30px;border-radius:50%;border:3px solid transparent;transition:border .3s}
+  .sw.on{border-color:#fff}
+
+  /* 03 POS */
+  .pos{display:flex;height:calc(100% - 58px)}
+  .pos .tiles{flex:1.25;padding:18px;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:108px;gap:12px;align-content:start}
+  .tile{background:#1a2744;border:1px solid var(--line);border-radius:13px;padding:13px 15px;display:flex;flex-direction:column;justify-content:space-between}
+  .tile b{font-size:17px}.tile span{color:var(--blue);font-weight:700}
+  .tile.tap{animation:tap .4s ease}
+  @keyframes tap{40%{transform:scale(.94);background:#25365a}}
+  .pos .cart{flex:1;border-left:1px solid var(--line);padding:18px;display:flex;flex-direction:column;background:#0f1830}
+  .crow{display:flex;justify-content:space-between;padding:12px 4px;border-bottom:1px solid #1b2742;font-size:17px}
+  .tot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--line)}
+  .tot b{font:800 44px "JetBrains Mono",monospace}
+  .pay{display:flex;gap:8px;margin-top:12px}
+  .pay b{flex:1;text-align:center;padding:12px 0;border-radius:10px;background:#1a2744;border:1px solid var(--line);font-size:15px;color:var(--ink2)}
+  .pay b.on{background:var(--blue);color:#06244a}
+  .receipt{position:absolute;left:300px;bottom:-330px;width:250px;background:#fff;color:#222;border-radius:6px 6px 0 0;padding:16px 18px 20px;
+    font:13px/1.55 "JetBrains Mono",monospace;box-shadow:0 -10px 40px rgba(0,0,0,.5);transition:bottom .8s cubic-bezier(.16,1,.3,1)}
+  .receipt.show{bottom:0}
+  .receipt b{display:block;text-align:center;font-size:15px;margin-bottom:4px}
+
+  /* 04 sales flow */
+  .flow{display:flex;align-items:center;justify-content:center;gap:18px;padding:34px 24px 16px}
+  .stepc{width:230px;padding:18px;border-radius:14px;background:#111c34;border:1px solid var(--line);text-align:center;opacity:.35;transition:all .4s}
+  .stepc.on{opacity:1;border-color:var(--blue);box-shadow:0 0 0 4px rgba(77,163,255,.15)}
+  .stepc .k{font-size:13px;letter-spacing:.14em;color:var(--blue);text-transform:uppercase}
+  .stepc .t{font:800 24px Archivo,sans-serif;margin-top:6px}
+  .stepc .s{font-size:14px;color:var(--ink3);margin-top:4px}
+  .arr{font-size:30px;color:var(--ink3)}
+  .salesbot{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;padding:8px 24px}
+  .pdf{background:#fdfdfb;color:#1d2433;border-radius:10px;padding:18px 22px;font-size:14px}
+  .pdf .hd{display:flex;align-items:center;gap:10px;border-bottom:2px solid #e3e6ee;padding-bottom:10px;margin-bottom:8px}
+  .pdf .lg2{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#f5b042,#e07b1a);display:grid;place-items:center;color:#fff;font-weight:900}
+  .pdf .kind{margin-inline-start:auto;font-weight:900;color:#2166ac;font-size:18px}
+  .pdf .ln{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #edf0f5}
+  .pdf .tt{display:flex;justify-content:space-between;font-weight:900;font-size:17px;padding-top:8px}
+  .side4{display:flex;flex-direction:column;gap:12px}
+  .toast{padding:14px 16px;border-radius:12px;font-size:15px;border:1px solid}
+  .toast.w{background:rgba(245,176,66,.1);border-color:rgba(245,176,66,.4);color:#ffd28a}
+  .toast.g{background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.4);color:#8ff0c8}
+  .toast b{display:block;font-size:16px;margin-bottom:3px}
+
+  /* tables (05 inventory, 06 purchasing) */
+  .tbl{padding:12px 24px}
+  .hr,.tr{display:grid;grid-template-columns:2.2fr 1.1fr 1fr 1fr;padding:12px 8px;align-items:center}
+  .hr{font-size:13px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--line)}
+  .tr{font-size:17px;border-bottom:1px solid #1b2742;border-radius:8px;transition:background .4s}
+  .tr .q{text-align:right;font:700 17px "JetBrains Mono",monospace}
+  .tr .q.flash{animation:qf .6s ease}
+  @keyframes qf{40%{color:var(--blue-l);transform:scale(1.15)}}
+  .tr.hot{background:rgba(245,176,66,.1)}
+  .badge{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--amber);color:#1a1200;margin-left:8px;font-weight:700}
+  .move{display:flex;align-items:center;gap:16px;margin:16px 24px 0;padding:14px 18px;border-radius:12px;background:#111c34;border:1px dashed var(--line);font-size:16px}
+  .move .bx{font-size:24px;transition:transform 1.2s cubic-bezier(.45,.05,.4,1)}
+  .move .bx.go{transform:translateX(330px)}
+  .pipe{display:flex;gap:14px;padding:26px 24px 10px}
+  .pst{flex:1;padding:16px;border-radius:13px;background:#111c34;border:1px solid var(--line);opacity:.4;transition:all .4s}
+  .pst.on{opacity:1;border-color:var(--good)}
+  .pst .t{font:700 18px Archivo,sans-serif}.pst .s{font-size:14px;color:var(--ink3);margin-top:4px}
+  .pst .ok{float:right;color:var(--good);font-weight:800;opacity:0}.pst.on .ok{opacity:1}
+  .owe{margin:12px 24px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .owe .kpi .n{font-size:24px}
+  .appr{margin:4px 24px;padding:12px 16px;border-radius:12px;background:rgba(77,163,255,.1);border:1px solid rgba(77,163,255,.35);font-size:15px;color:var(--blue-l)}
+
+  /* 07 accounting */
+  .acct{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;padding:22px}
+  .je .jr{display:grid;grid-template-columns:1.6fr 1fr 1fr;padding:11px 6px;border-bottom:1px solid #1b2742;font-size:16px}
+  .je .jr.h{font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em}
+  .je .jr span:nth-child(n+2){text-align:right;font-family:"JetBrains Mono",monospace}
+  .bal{margin-top:12px;font-size:15px;color:var(--good);font-weight:700}
+  .pl .r{display:flex;justify-content:space-between;padding:10px 4px;border-bottom:1px solid #1b2742;font-size:16px}
+  .pl .r span:last-child{font-family:"JetBrains Mono",monospace}
+  .pl .r.t{font-weight:800;font-size:19px;border-bottom:0}.pl .r.t span:last-child{color:var(--good)}
+  .reps{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .reps .chip.on{background:var(--blue);color:#06244a}
+
+  /* 08 currency */
+  .cur .r{display:flex;align-items:center;gap:14px;padding:14px 8px;border-bottom:1px solid #1b2742;font-size:17px}
+  .cc{font-size:12px;font-weight:800;padding:5px 9px;border-radius:7px}
+  .cc.usd{background:#13365e;color:var(--blue-l)}.cc.lbp{background:#123b2c;color:#6ee7b7}.cc.eur{background:#3a2a4d;color:#d4b8ff}
+  .cur .amt{margin-left:auto;text-align:right;font:700 17px "JetBrains Mono",monospace}
+  .cur .amt small{display:block;font-size:14px;color:var(--blue-l);opacity:0;transition:opacity .4s}
+  .cur.conv .amt small{opacity:1}
+  .cur .foot{display:flex;justify-content:space-between;align-items:center;padding:16px 30px;border-top:1px solid var(--line);background:#0f1830;position:absolute;left:0;right:0;bottom:0}
+  .cur .foot b{font:800 40px "JetBrains Mono",monospace;color:var(--good)}
+
+  /* 09 team */
+  .team{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;padding:22px}
+  .pr{display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid #1b2742;font-size:16px}
+  .pr .np{margin-left:auto;font:700 16px "JetBrains Mono",monospace}
+  .runb{display:inline-block;margin-top:14px;padding:12px 20px;border-radius:11px;background:var(--blue);color:#06244a;font-weight:800}
+  .runb.press{animation:tap .4s ease}
+  .done{margin-top:10px;color:var(--good);font-weight:700}
+  .leave{display:flex;flex-direction:column;gap:10px}
+  .lv{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:11px;background:#0f1830;font-size:15px}
+  .lv b{font-family:"JetBrains Mono",monospace}
+  .portal{padding:12px 14px;border-radius:11px;border:1px dashed var(--line);font-size:14px;color:var(--ink2)}
+
+  /* 10 grow */
+  .grow{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;padding:22px}
+  .dev{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;background:#111c34;border:1px solid var(--line);margin-bottom:10px;font-size:16px}
+  .dev .ic{width:44px;height:44px;border-radius:11px;background:#13365e;display:grid;place-items:center;font-size:21px}
+  .dev .st{margin-left:auto;color:var(--good);font-size:14px}
+  .dev.add{border-style:dashed;justify-content:center;color:var(--ink3)}
+  .yours{display:flex;flex-direction:column;gap:12px}
+  .yo{display:flex;align-items:center;gap:12px;padding:16px;border-radius:12px;background:#0f1830;font-size:17px;font-weight:700}
+  .yo i{font-style:normal;width:34px;height:34px;border-radius:50%;background:rgba(52,211,153,.16);color:var(--good);display:grid;place-items:center}
+</style>
+</head>
+<body>
+
+<div class="vhead"><div class="wm"><span class="t">Trade</span>Keeper</div><div class="chap" id="vChap"></div></div>
+
+<div class="tour">
+  <div class="screen" id="screen">
+    <div id="stage">
+
+      <!-- 01 overview -->
+      <section class="scene" data-s="1">
+        <div class="ui"><div class="top"><div class="brand"><span class="t">Trade</span>Keeper</div><div class="chip">Dashboard</div><div class="chip live r">● Offline · all running</div></div>
+          <div class="dash">
+            <div class="kpi"><div class="l">Cash on hand</div><div class="n" data-to="51434">$0</div></div>
+            <div class="kpi"><div class="l">Sales this month</div><div class="n" data-to="38210">$0</div></div>
+            <div class="kpi"><div class="l">Owed to you</div><div class="n" data-to="87281">$0</div></div>
+            <div class="kpi"><div class="l">Net profit</div><div class="n g" data-to="58852">$0</div></div>
+            <div class="chart" id="c1"><svg viewBox="0 0 1000 200" preserveAspectRatio="none"><path class="ln" d="M0,170 L90,150 L180,158 L270,118 L370,130 L470,92 L570,104 L670,66 L770,80 L870,44 L1000,58"/></svg></div>
+            <div class="mods"><div class="mod"><i>🛒</i>Sales</div><div class="mod"><i>📦</i>Stock</div><div class="mod"><i>📒</i>Accounting</div><div class="mod"><i>👥</i>Team</div></div>
+          </div></div>
+      </section>
+
+      <!-- 02 setup -->
+      <section class="scene" data-s="2">
+        <div class="ui"><div class="top"><div class="brand"><span class="t">Trade</span>Keeper</div><div class="chip">Set up your company</div></div>
+          <div class="setup">
+            <div class="box"><h4>Company</h4>
+              <div class="fld"><div class="l">Name</div><div class="v" id="coName"></div></div>
+              <div class="fld"><div class="l">Base currency</div><div class="v" id="coCur">—</div></div>
+              <div class="fld"><div class="l">Tax</div><div class="v" id="coTax">—</div></div>
+              <div class="l" style="font-size:13px;color:var(--ink3);margin-top:6px">Colour</div>
+              <div class="swatches"><div class="sw on" style="background:#4DA3FF"></div><div class="sw" style="background:#34d399"></div><div class="sw" style="background:#f5b042"></div><div class="sw" style="background:#c084fc"></div></div>
+            </div>
+            <div class="box"><h4>Team &amp; access</h4>
+              <div class="usr"><div class="av">SK</div><div class="nm">Sara Khoury<small>Cashier</small></div><div class="perms"><span class="perm on">Till</span><span class="perm">Books</span><span class="perm">Stock</span></div></div>
+              <div class="usr"><div class="av">RH</div><div class="nm">Rania Haddad<small>Accountant</small></div><div class="perms"><span class="perm">Till</span><span class="perm" id="pBooks">Books</span><span class="perm">Stock</span></div></div>
+              <div class="usr"><div class="av">ON</div><div class="nm">Omar Nassar<small>Stores</small></div><div class="perms"><span class="perm">Till</span><span class="perm">Books</span><span class="perm on">Stock</span></div></div>
+              <div class="langrow"><span class="lg on" data-l="en">English</span><span class="lg" data-l="fr">Français</span><span class="lg" data-l="ar">عربي</span></div>
+            </div>
+          </div></div>
+      </section>
+
+      <!-- 03 POS -->
+      <section class="scene" data-s="3">
+        <div class="ui"><div class="top"><div class="brand"><span class="t">Trade</span>Keeper</div><div class="chip">Front counter</div><div class="chip live">Shift open · Sara</div><div class="chip r" id="netChip">Online</div></div>
+          <div class="pos">
+            <div class="tiles">
+              <div class="tile"><b>Ball valve</b><span>14.75</span></div><div class="tile"><b>Elbow 90°</b><span>3.20</span></div>
+              <div class="tile"><b>Copper pipe</b><span>12.40</span></div><div class="tile"><b>PTFE tape</b><span>1.10</span></div>
+              <div class="tile"><b>Dust mask</b><span>12.80</span></div><div class="tile"><b>Sealant</b><span>6.50</span></div>
+            </div>
+            <div class="cart"><div id="cart"></div>
+              <div class="tot"><span style="color:var(--ink2)">TOTAL</span><b id="posTot">0.00</b></div>
+              <div class="pay"><b id="pCash">Cash</b><b>Card</b><b>Whish</b><b>OMT</b></div>
+            </div>
+          </div>
+          <div class="receipt" id="receipt"><b>Nour Trading</b><span id="rcpt"></span>-------------------<br>Paid cash · Thank you!</div>
+        </div>
+      </section>
+
+      <!-- 04 sales -->
+      <section class="scene" data-s="4">
+        <div class="ui"><div class="top"><div class="brand"><span class="t">Trade</span>Keeper</div><div class="chip">Abu Karim Hardware</div><div class="chip r">Price list: Trade</div></div>
+          <div class="flow">
+            <div class="stepc" id="st1"><div class="k">Quote</div><div class="t">Q-0041</div><div class="s">$439.01</div></div><div class="arr">→</div>
+            <div class="stepc" id="st2"><div class="k">Order</div><div class="t">SO-0027</div><div class="s">Accepted</div></div><div class="arr">→</div>
+            <div class="stepc" id="st3"><div class="k">Invoice</div><div class="t">INV-0102</div><div class="s">Issued · numbered</div></div>
+          </div>
+          <div class="salesbot">
+            <div class="pdf" id="pdf4"></div>
+            <div class="side4">
+              <div class="toast w hide" id="t4a"><b>Credit limit reached</b>Owes $4,950 of a $5,000 limit. The sale needs approval.</div>
+              <div class="toast g hide" id="t4b"><b>Payment recorded</b>Dated cheque · due 30 Nov · balance updated</div>
+            </div>
+          </div></div>
+      </section>
+
+      <!-- 05 inventory -->
+      <section class="scene" data-s="5">
+        <div class="ui"><div class="top"><div class="brand"><span class="t">Trade</span>Keeper</div><div class="chip">Stock on hand</div><div class="chip r">Valuation: FIFO</div></div>
+          <div class="tbl">
+            <div class="hr"><div>Product</div><div>Warehouse</div><div style="text-align:right">In stock</div><div style="text-align:right">Unit cost</div></div>
+            <div class="tr"><div><b>Ball valve</b></div><div>Main</div><div class="q" id="q1">143</div><div class="q">$9.10</div></div>
+            <div class="tr"><div><b>Copper pipe 15mm</b></div><div>Main</div><div class="q" id="q2">87</div><div class="q">$8.40</div></div>
+            <div class="tr" id="lowr"><div><b>Dust mask pack</b><span class="badge hide" id="lowb">Reorder</span></div><div>Van stock</div><div class="q" id="q3">9</div><div class="q">$9.80</div></div>
+            <div class="tr"><div><b>Plumbing kit</b> <span style="color:var(--ink3);font-size:13px">built from 4 parts</span></div><div>Main</div><div class="q" id="q4">12</div><div class="q">$31.20</div></div>
+          </div>
+          <div class="move"><span>Main</span><span class="bx" id="bx">📦</span><span style="margin-left:auto">Van stock</span><span class="chip" id="mvc">Transfer 20 × Dust mask</span></div>
+        </div>
+      </section>
+
+      <!-- 06 purchasing -->
+      <section class="scene" data-s="6">
+        <div class="ui"><div class="top"><div class="brand"><span class="t">Trade</span>Keeper</div><div class="chip">Beirut Pipe Supply</div></div>
+          <div class="pipe">
+            <div class="pst" id="pp1"><span class="ok">✓</span><div class="t">Purchase order</div><div class="s">PO-0019 · 200 × Copper pipe</div></div>
+            <div class="pst" id="pp2"><span class="ok">✓</span><div class="t">Goods received</div><div class="s">200 in · stock up</div></div>
+            <div class="pst" id="pp3"><span class="ok">✓</span><div class="t">Bill matched</div><div class="s">Billed 200 = received 200</div></div>
+          </div>
+          <div class="appr hide" id="appr">🔒 Above your $5,000 limit: waiting for the owner's approval</div>
+          <div class="owe">
+            <div class="kpi"><div class="l">You owe</div><div class="n" style="color:var(--amber)">$41,906</div></div>
+            <div class="kpi"><div class="l">Due this week</div><div class="n">$6,120</div></div>
+            <div class="kpi"><div class="l">Overdue</div><div class="n" style="color:var(--bad)">$880</div></div>
+          </div></div>
+      </section>
+
+      <!-- 07 accounting -->
+      <section class="scene" data-s="7">
+        <div class="ui"><div class="top"><div class="brand"><span class="t">Trade</span>Keeper</div><div class="chip">Posted automatically</div></div>
+          <div class="acct">
+            <div class="box je"><h4>Journal · INV-0102</h4>
+              <div class="jr h"><span>Account</span><span>Debit</span><span>Credit</span></div>
+              <div class="jr hide" id="j1"><span>Receivables</span><span>439.01</span><span></span></div>
+              <div class="jr hide" id="j2"><span>Sales</span><span></span><span>395.50</span></div>
+              <div class="jr hide" id="j3"><span>VAT payable</span><span></span><span>43.51</span></div>
+              <div class="bal hide" id="jb">✓ Balanced: 439.01 = 439.01</div>
+            </div>
+            <div class="box pl"><h4>Profit &amp; Loss · 2026</h4>
+              <div class="r"><span>Income</span><span>$214,573.66</span></div>
+              <div class="r"><span>Cost of sales</span><span>($87,820.00)</span></div>
+              <div class="r"><span>Expenses</span><span>($67,901.00)</span></div>
+              <div class="r t"><span>Net profit</span><span>$58,852.66</span></div>
+              <div class="reps"><span class="chip">Balance sheet</span><span class="chip">Trial balance</span><span class="chip">Ledger</span><span class="chip">VAT return</span><span class="chip">Aging</span></div>
+            </div>
+          </div></div>
+      </section>
+
+      <!-- 08 currency -->
+      <section class="scene" data-s="8">
+        <div class="ui"><div class="top"><div class="brand"><span class="t">Trade</span>Keeper</div><div class="chip">Today</div><div class="chip r">1 USD = 89,500 LBP · 1 EUR = 1.08 USD</div></div>
+          <div class="cur" id="cur8" style="padding:8px 24px">
+            <div class="r"><span class="cc usd">USD</span><div>Invoice INV-0102</div><div class="amt">$439.01<small>&nbsp;</small></div></div>
+            <div class="r"><span class="cc lbp">LBP</span><div>Payment · Abu Karim</div><div class="amt">LBP 4,475,000<small>= $50.00</small></div></div>
+            <div class="r"><span class="cc eur">EUR</span><div>Bill · Milano Valves</div><div class="amt">€ 1,200.00<small>= $1,296.00</small></div></div>
+            <div class="r"><span class="cc lbp">LBP</span><div>Whish transfer</div><div class="amt">LBP 2,237,500<small>= $25.00</small></div></div>
+            <div class="foot"><span style="color:var(--ink2)">Everything in USD</span><b id="cur8t">$0.00</b></div>
+          </div></div>
+      </section>
+
+      <!-- 09 team -->
+      <section class="scene" data-s="9">
+        <div class="ui"><div class="top"><div class="brand"><span class="t">Trade</span>Keeper</div><div class="chip">Payroll · October</div></div>
+          <div class="team">
+            <div class="box">
+              <div class="pr"><div class="av">SK</div><div>Sara Khoury</div><div class="np">$1,240</div></div>
+              <div class="pr"><div class="av">RH</div><div>Rania Haddad</div><div class="np">$1,680</div></div>
+              <div class="pr"><div class="av">ON</div><div>Omar Nassar</div><div class="np">$1,105</div></div>
+              <div class="runb" id="runb">Run payroll</div>
+              <div class="done hide" id="pdone">✓ 3 payslips · entries posted · net $4,025</div>
+            </div>
+            <div class="leave">
+              <div class="lv"><span>Annual leave · Sara</span><b>14 days left</b></div>
+              <div class="lv"><span>Public holiday</span><b>22 Nov</b></div>
+              <div class="lv"><span>End of service · Omar</span><b id="eos">$6,410</b></div>
+              <div class="portal">👤 Employee portal: payslips &amp; leave requests, nothing else</div>
+            </div>
+          </div></div>
+      </section>
+
+      <!-- 10 grow -->
+      <section class="scene" data-s="10">
+        <div class="ui"><div class="top"><div class="brand"><span class="t">Trade</span>Keeper</div><div class="chip">Devices &amp; branches</div><div class="chip live r">Backed up 2 min ago</div></div>
+          <div class="grow">
+            <div>
+              <div class="dev"><div class="ic">🖥️</div><div>Front counter · Beirut</div><div class="st">● online</div></div>
+              <div class="dev"><div class="ic">📟</div><div>Counter 2 · Beirut</div><div class="st">● online</div></div>
+              <div class="dev hide" id="newdev"><div class="ic">🏬</div><div>Tripoli branch</div><div class="st">✓ just paired</div></div>
+              <div class="dev add" id="adddev">＋ Pair a new device</div>
+            </div>
+            <div class="yours">
+              <div class="yo"><i>✓</i><span>Runs on your computers</span></div>
+              <div class="yo"><i>✓</i><span>Your data stays with you</span></div>
+              <div class="yo"><i>✓</i><span>No monthly fees</span></div>
+            </div>
+          </div></div>
+      </section>
+
+      <div class="cursor" id="cursor"><svg width="34" height="34" viewBox="0 0 24 24"><path d="M4 2 L4 20 L9 15 L12.5 22 L15 21 L12 14 L19 14 Z" fill="#fff" stroke="#0b2440" stroke-width="1.2"/></svg><div class="ring"></div></div>
+    </div>
+    <button class="arrow prev" id="prev" aria-label="Previous">‹</button>
+    <button class="arrow next" id="next" aria-label="Next">›</button>
+    <button class="start" id="start"><span>▶ <b id="startTxt">Start the tour</b></span></button>
+  </div>
+
+  <aside class="panel">
+    <div class="topline"><span class="count" id="count"></span>
+      <div class="langs"><button lang="en" data-lang="en">EN</button><button lang="ar" data-lang="ar">عربي</button></div></div>
+    <div id="ptext"></div>
+    <div class="voice"><button id="mute" title="Voice on/off">🔊</button><div class="bar"><i id="vbar"></i></div></div>
+    <div class="dots" id="dots"></div>
+  </aside>
+</div>
+
+<div class="card" id="cardIn"><div><div class="wm"><span class="t">Trade</span>Keeper</div><div class="sub" id="cardInSub"></div></div></div>
+<div class="card" id="cardOut"><div><div class="wm"><span class="t">Trade</span>Keeper</div><div class="sub" id="cardOutSub"></div><div class="cta" id="cardCta"></div><div class="contact">hwmoubarak@gmail.com · +961 71 370 994</div></div></div>
+
+<audio id="vo" preload="auto"></audio>
+<!-- video mode only: solid magenta until the clock starts, so the recording's lead-in can be trimmed to the frame -->
+<div id="mark" style="display:none;position:fixed;inset:0;z-index:999;background:#ff00ff"></div>
+
+<script>
+const T = {
+  en: { start:'Start the tour', of:'of', intro:'How it works', outro:'Run your whole business. Offline.', cta:'Book your free demo',
+    ch: [
+      ['One system for your whole business', ['Sales, stock, accounting and your team in one place','Runs on your own computers, even with no internet','Your data never leaves your shop']],
+      ['Up and running in minutes', ['Create your company: currency, tax and starter accounts','Every person gets a login and only the screens you allow','Your menu names, your colour, in Arabic, French or English']],
+      ['A till that never stops', ['Scan or tap, then take cash, card, Whish or OMT','The receipt prints and the drawer opens by itself','Keeps selling offline, and syncs when the connection is back']],
+      ['From quote to paid', ['Quote, order, invoice: one click each, nothing retyped','Customer price lists and credit limits','Branded PDF invoices in Arabic, French or English']],
+      ['Stock that counts itself', ['Every sale and delivery moves stock automatically','FIFO or average cost, so your profit is real','Low-stock alerts, batches, serials, transfers and kits']],
+      ['Pay only for what arrived', ['Purchase order, goods received, supplier bill','Every bill checked against what you actually received','Owner approval above a limit you set']],
+      ['Books that keep themselves', ['Every transaction posts its own journal entry','Debits always equal credits','P&L, balance sheet and VAT return, always up to date']],
+      ['Dollars and lira, side by side', ['Invoice, get paid and buy in any currency','Each document keeps the exchange rate of its day','Every report adds up in your base currency']],
+      ['Payroll in one step', ['Payslips, deductions and entries, done for you','Attendance, leave and end-of-service indemnity','A private portal for every employee']],
+      ['Grows with you. Stays yours.', ['Add tills and branches in seconds','Automatic hourly backups on your own machine','No monthly fees, no internet required']],
+    ] },
+  ar: { start:'ابدأ الجولة', of:'من', intro:'كيف يعمل', outro:'أدِر عملك بالكامل، من دون إنترنت.', cta:'احجز عرضك المجاني',
+    ch: [
+      ['نظام واحد لعملك بالكامل', ['المبيعات والمخزون والمحاسبة وفريقك في مكان واحد','يعمل على أجهزتك، حتى من دون إنترنت','بياناتك لا تغادر متجرك']],
+      ['جاهز خلال دقائق', ['أنشئ شركتك: العملة والضريبة والحسابات الأساسية','لكل شخص حسابه، ويرى فقط ما تسمح به','أسماء قوائمك ولونك، بالعربية أو الفرنسية أو الإنجليزية']],
+      ['صندوق بيع لا يتوقف', ['امسح أو اضغط، واقبض نقداً أو بالبطاقة أو ويش أو OMT','يُطبع الإيصال ويُفتح الدرج تلقائياً','يبيع من دون إنترنت ويتزامن عند عودة الاتصال']],
+      ['من عرض السعر إلى الدفع', ['عرض سعر، طلبية، فاتورة: نقرة واحدة لكل منها','لوائح أسعار وسقف دين لكل زبون','فواتير PDF باسمك بالعربية أو الفرنسية أو الإنجليزية']],
+      ['مخزون يحسب نفسه', ['كل بيع واستلام يحرّك المخزون تلقائياً','كلفة حقيقية، فيكون ربحك حقيقياً','تنبيهات النقص، والدفعات، والأرقام التسلسلية، والنقل']],
+      ['ادفع فقط ثمن ما وصل', ['أمر شراء، استلام البضاعة، فاتورة المورّد','مطابقة كل فاتورة مع ما استُلم فعلاً','موافقة المالك فوق الحد الذي تحدده']],
+      ['حسابات تُنجز نفسها', ['كل عملية تسجّل قيدها المحاسبي بنفسها','المدين يساوي الدائن دائماً','الأرباح والخسائر والميزانية والضريبة، محدّثة دائماً']],
+      ['الدولار والليرة جنباً إلى جنب', ['أصدر الفواتير واقبض واشترِ بأي عملة','كل مستند يحتفظ بسعر صرف يومه','كل التقارير تُجمع بعملتك الأساسية']],
+      ['الرواتب بخطوة واحدة', ['قسائم الرواتب والاقتطاعات والقيود، جاهزة عنك','الحضور والإجازات وتعويض نهاية الخدمة','بوابة خاصة لكل موظف']],
+      ['يكبر معك ويبقى ملكك', ['أضف صناديق وفروعاً خلال ثوانٍ','نسخ احتياطي تلقائي كل ساعة على جهازك','لا اشتراكات شهرية، ولا حاجة للإنترنت']],
+    ] },
+};
+const N = 10;
+const q = new URLSearchParams(location.search);
+const VIDEO = q.has('video');
+let LANG = (q.get('lang') || (navigator.language||'').slice(0,2)) === 'ar' ? 'ar' : 'en';
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const stage = $('#stage'), screen = $('#screen'), cursor = $('#cursor'), vo = $('#vo');
+const scenes = $$('.scene');
+let cur = 0, timers = [], soundOn = true, started = false;
+
+/* ---------- stage scaling ---------- */
+function fit(){ const w = VIDEO ? 1200 : screen.clientWidth; stage.style.transform = `scale(${w/1280})`; }
+addEventListener('resize', fit);
+
+/* ---------- helpers ---------- */
+const later = (ms, fn) => timers.push(setTimeout(fn, ms));
+function stopTimers(){ timers.forEach(clearTimeout); timers = []; cursor.classList.remove('on','tap'); }
+function pos(el){ const b=el.getBoundingClientRect(), s=stage.getBoundingClientRect(), k=s.width/1280;
+  return { x:(b.left-s.left)/k + b.width/k/2, y:(b.top-s.top)/k + b.height/k/2 }; }
+function moveTo(el){ const p=pos(el); cursor.classList.add('on'); cursor.style.left=p.x+'px'; cursor.style.top=p.y+'px'; }
+function tap(){ cursor.classList.remove('tap'); void cursor.offsetWidth; cursor.classList.add('tap'); }
+function redo(el, cls){ el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+const fmt = n => n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+function count(el, to, pre='$', dec=false, ms=1200){ const t0=performance.now();
+  (function go(t){ const p=Math.min(1,(t-t0)/ms), e=1-Math.pow(1-p,3), v=to*e;
+    el.textContent = pre + (dec ? fmt(v) : Math.round(v).toLocaleString('en-US')); if(p<1) requestAnimationFrame(go); })(t0); }
+function typeInto(el, text, ms=55){ el.textContent=''; el.classList.add('caret');
+  [...text].forEach((c,i)=>later(i*ms, ()=>{ el.textContent += c; }));
+  later(text.length*ms+200, ()=>el.classList.remove('caret')); }
+
+/* ---------- each chapter's loop: [length ms, run] ---------- */
+const LOOPS = {
+  1: [9000, s => {
+    s.querySelectorAll('.kpi .n').forEach((n,i)=>{ n.textContent='$0'; later(300+i*150, ()=>count(n, +n.dataset.to)); });
+    const c=$('#c1'); c.classList.remove('draw'); later(400, ()=>c.classList.add('draw'));
+    s.querySelectorAll('.mod').forEach((m,i)=>{ m.classList.remove('pop'); later(1800+i*220, ()=>redo(m,'pop')); });
+  }],
+  2: [11000, s => {
+    $('#coCur').textContent='—'; $('#coTax').textContent='—'; $('#pBooks').classList.remove('on');
+    later(200, ()=>typeInto($('#coName'), 'Nour Trading'));
+    later(1300, ()=>moveTo($('#coCur'))); later(1800, ()=>{ tap(); $('#coCur').textContent='USD — US dollar'; });
+    later(2500, ()=>moveTo($('#coTax'))); later(3000, ()=>{ tap(); $('#coTax').textContent='Lebanon · VAT 11%'; });
+    later(4000, ()=>moveTo($('#pBooks'))); later(4500, ()=>{ tap(); $('#pBooks').classList.add('on'); });
+    const lgs=s.querySelectorAll('.lg'); lgs.forEach((l,i)=>l.classList.toggle('on', i===0));
+    ['fr','ar','en'].forEach((k,i)=>{ later(5600+i*1300, ()=>{ const el=s.querySelector(`.lg[data-l=${k}]`); moveTo(el);
+      later(450, ()=>{ tap(); lgs.forEach(l=>l.classList.toggle('on', l===el)); }); }); });
+    const sws=s.querySelectorAll('.sw'); sws.forEach((w,i)=>w.classList.toggle('on',i===0));
+    later(9600, ()=>{ cursor.classList.remove('on'); sws.forEach((w,i)=>w.classList.toggle('on',i===1)); });
+    later(10300, ()=>sws.forEach((w,i)=>w.classList.toggle('on',i===0)));
+  }],
+  3: [9500, s => {
+    const tiles=s.querySelectorAll('.tile'), cart=$('#cart'), items=[[0,'Ball valve',14.75],[2,'Copper pipe',12.40],[4,'Dust mask',12.80]];
+    cart.innerHTML=''; $('#posTot').textContent='0.00'; $('#receipt').classList.remove('show'); $('#pCash').classList.remove('on');
+    const net=$('#netChip'); net.textContent='Online'; net.className='chip r';
+    let tot=0;
+    items.forEach(([ti,n,p],i)=>{ later(400+i*900, ()=>moveTo(tiles[ti])); later(850+i*900, ()=>{ tap(); redo(tiles[ti],'tap');
+      cart.insertAdjacentHTML('beforeend', `<div class="crow rin"><span>${n}</span><span class="mono">${p.toFixed(2)}</span></div>`);
+      tot+=p; $('#posTot').textContent=fmt(tot); }); });
+    later(1500, ()=>{ net.textContent='Offline · still selling'; net.className='chip warn r'; });
+    later(3400, ()=>moveTo($('#pCash'))); later(3900, ()=>{ tap(); $('#pCash').classList.add('on'); });
+    later(4300, ()=>{ $('#rcpt').innerHTML=items.map(([,n,p])=>`${n.padEnd(14,'.')} ${p.toFixed(2)}`).join('<br>')+`<br>TOTAL USD ..... ${fmt(tot)}<br>`; $('#receipt').classList.add('show'); cursor.classList.remove('on'); });
+    later(7200, ()=>{ net.textContent='Synced ✓'; net.className='chip live r'; });
+  }],
+  4: [10000, s => {
+    ['#st1','#st2','#st3'].forEach(x=>$(x).classList.remove('on')); ['#t4a','#t4b'].forEach(x=>$(x).classList.add('hide'));
+    const doc=$('#pdf4'); const docs=[
+      `<div class="hd"><div class="lg2">N</div><b>Nour Trading</b><div class="kind">INVOICE</div></div><div class="ln"><span>Copper pipe 15mm × 20</span><span>$248.00</span></div><div class="ln"><span>Ball valve × 10</span><span>$147.50</span></div><div class="ln"><span>VAT 11%</span><span>$43.51</span></div><div class="tt"><span>Total</span><span>$439.01</span></div>`,
+      `<div dir="rtl" style="font-family:Cairo,sans-serif"><div class="hd"><div class="lg2">ن</div><b>نور للتجارة</b><div class="kind">فاتورة</div></div><div class="ln"><span>أنبوب نحاس 15 ملم × 20</span><span>248.00 $</span></div><div class="ln"><span>صمام كروي × 10</span><span>147.50 $</span></div><div class="ln"><span>ضريبة القيمة المضافة 11%</span><span>43.51 $</span></div><div class="tt"><span>المجموع</span><span>439.01 $</span></div></div>`];
+    doc.innerHTML=docs[0]; doc.style.opacity=.25;
+    [['#st1',300],['#st2',1500],['#st3',2700]].forEach(([x,t])=>{ later(t-450, ()=>moveTo($(x))); later(t, ()=>{ tap(); $(x).classList.add('on'); }); });
+    later(3300, ()=>{ cursor.classList.remove('on'); doc.style.opacity=1; redo(doc,'pop'); });
+    later(5200, ()=>{ doc.innerHTML=docs[1]; redo(doc,'pop'); });
+    later(6000, ()=>{ $('#t4a').classList.remove('hide'); redo($('#t4a'),'pop'); });
+    later(7600, ()=>{ $('#t4b').classList.remove('hide'); redo($('#t4b'),'pop'); });
+  }],
+  5: [9000, s => {
+    const q=[['#q1',143],['#q2',87],['#q3',9],['#q4',12]]; q.forEach(([x,v])=>$(x).textContent=v);
+    $('#lowr').classList.remove('hot'); $('#lowb').classList.add('hide'); $('#bx').classList.remove('go'); $('#mvc').className='chip';
+    later(900, ()=>[['#q1',142],['#q2',86],['#q3',8]].forEach(([x,v])=>{ $(x).textContent=v; redo($(x),'flash'); }));
+    later(2200, ()=>[['#q1',141],['#q3',7]].forEach(([x,v])=>{ $(x).textContent=v; redo($(x),'flash'); }));
+    later(3100, ()=>{ $('#lowr').classList.add('hot'); $('#lowb').classList.remove('hide'); redo($('#lowb'),'pop'); });
+    later(4600, ()=>{ $('#bx').classList.add('go'); });
+    later(5900, ()=>{ $('#q3').textContent=27; redo($('#q3'),'flash'); $('#lowr').classList.remove('hot'); $('#lowb').classList.add('hide'); $('#mvc').className='chip live'; $('#mvc').textContent='✓ Transferred 20'; });
+    later(7000, ()=>{ $('#q4').textContent=13; redo($('#q4'),'flash'); });
+    later(8800, ()=>{ $('#mvc').textContent='Transfer 20 × Dust mask'; });
+  }],
+  6: [9000, s => {
+    ['#pp1','#pp2','#pp3'].forEach(x=>$(x).classList.remove('on')); $('#appr').classList.add('hide');
+    [['#pp1',600],['#pp2',2200],['#pp3',3800]].forEach(([x,t])=>{ later(t-450, ()=>moveTo($(x))); later(t, ()=>{ tap(); $(x).classList.add('on'); redo($(x),'pop'); }); });
+    later(4600, ()=>cursor.classList.remove('on'));
+    later(5400, ()=>{ $('#appr').classList.remove('hide'); redo($('#appr'),'pop'); });
+  }],
+  7: [9000, s => {
+    ['#j1','#j2','#j3','#jb'].forEach(x=>$(x).classList.add('hide')); s.querySelectorAll('.reps .chip').forEach(c=>c.classList.remove('on'));
+    ['#j1','#j2','#j3','#jb'].forEach((x,i)=>later(500+i*650, ()=>{ $(x).classList.remove('hide'); redo($(x),'rin'); }));
+    s.querySelectorAll('.reps .chip').forEach((c,i)=>later(3800+i*700, ()=>{ s.querySelectorAll('.reps .chip').forEach(o=>o.classList.toggle('on',o===c)); }));
+  }],
+  8: [8500, s => {
+    $('#cur8').classList.remove('conv'); $('#cur8t').textContent='$0.00';
+    s.querySelectorAll('.cur .r').forEach((r,i)=>{ r.classList.remove('rin'); later(150+i*200, ()=>redo(r,'rin')); });
+    later(2600, ()=>{ $('#cur8').classList.add('conv'); count($('#cur8t'), 1810.01, '$', true, 1300); });
+  }],
+  9: [9000, s => {
+    $('#pdone').classList.add('hide'); $('#eos').textContent='$6,410';
+    later(1000, ()=>moveTo($('#runb'))); later(1600, ()=>{ tap(); redo($('#runb'),'press'); });
+    later(2000, ()=>{ $('#pdone').classList.remove('hide'); redo($('#pdone'),'pop'); cursor.classList.remove('on'); });
+    later(4200, ()=>{ count($('#eos'), 6502, '$', false, 900); });
+  }],
+  10: [9000, s => {
+    $('#newdev').classList.add('hide'); s.querySelectorAll('.yo').forEach(y=>y.classList.add('hide'));
+    later(800, ()=>moveTo($('#adddev'))); later(1400, ()=>{ tap(); redo($('#adddev'),'pop'); });
+    later(1800, ()=>{ $('#newdev').classList.remove('hide'); redo($('#newdev'),'rin'); cursor.classList.remove('on'); });
+    s.querySelectorAll('.yo').forEach((y,i)=>later(3000+i*900, ()=>{ y.classList.remove('hide'); redo(y,'rin'); }));
+  }],
+};
+let loopTimer = 0;
+function runLoop(n){ clearInterval(loopTimer); stopTimers(); const [len, run] = LOOPS[n], s = scenes[n-1];
+  run(s); loopTimer = setInterval(()=>{ stopTimers(); run(s); }, len); }
+
+/* ---------- panel text + language ---------- */
+function setLang(l){ LANG=l; document.body.classList.toggle('ar', l==='ar'); document.documentElement.lang=l; document.documentElement.dir = l==='ar'?'rtl':'ltr';
+  $$('.langs button').forEach(b=>b.classList.toggle('on', b.dataset.lang===l));
+  $('#startTxt').textContent=T[l].start; $('#cardInSub').textContent=T[l].intro; $('#cardOutSub').textContent=T[l].outro; $('#cardCta').textContent=T[l].cta;
+  text(); }
+function text(){ const [h, pts] = T[LANG].ch[cur];
+  $('#count').textContent = `${String(cur+1).padStart(2,'0')} ${T[LANG].of} ${N}`;
+  $('#vChap').textContent = h;
+  $('#ptext').innerHTML = `<h3 class="fade">${h}</h3><ul class="fade" style="margin-top:16px">${pts.map(p=>`<li>${p}</li>`).join('')}</ul>`;
+  $$('#dots button').forEach((d,i)=>{ d.classList.toggle('on', i===cur); }); }
+
+/* ---------- voice: plays once each time a chapter is opened ---------- */
+const src = (n, l=LANG) => `audio/${l}-${String(n).padStart(2,'0')}.mp3`;
+function speak(){ vo.pause(); $('#vbar').style.width='0';
+  if (VIDEO || !soundOn || !started) return;
+  vo.src = src(cur+1); vo.currentTime = 0; vo.play().catch(()=>{}); }
+vo.addEventListener('timeupdate', ()=>{ if(vo.duration) $('#vbar').style.width = (vo.currentTime/vo.duration*100)+'%'; });
+vo.addEventListener('ended', ()=>{ $('#vbar').style.width='100%'; });
+
+function go(n){ cur = (n+N)%N; scenes.forEach((s,i)=>s.classList.toggle('active', i===cur));
+  $$('#dots button')[cur].classList.add('seen'); text(); runLoop(cur+1); speak(); }
+
+/* ---------- website controls ---------- */
+for (let i=0;i<N;i++){ const b=document.createElement('button'); b.setAttribute('aria-label','Chapter '+(i+1)); b.onclick=()=>{ begin(); go(i); }; $('#dots').appendChild(b); }
+function begin(){ if(started) return; started=true; $('#start').classList.add('gone'); }
+$('#start').onclick = ()=>{ begin(); go(cur); };
+$('#next').onclick = ()=>{ begin(); go(cur+1); };
+$('#prev').onclick = ()=>{ begin(); go(cur-1); };
+$('#mute').onclick = ()=>{ soundOn=!soundOn; $('#mute').textContent = soundOn?'🔊':'🔇'; $('#mute').classList.toggle('on',!soundOn); if(!soundOn) vo.pause(); else speak(); };
+$$('.langs button').forEach(b=>b.onclick=()=>{ setLang(b.dataset.lang); speak(); });
+addEventListener('keydown', e=>{ if(VIDEO) return; const fwd = LANG==='ar' ? 'ArrowLeft' : 'ArrowRight', back = LANG==='ar' ? 'ArrowRight' : 'ArrowLeft';
+  if(e.key===fwd){ begin(); go(cur+1); } if(e.key===back){ begin(); go(cur-1); } });
+
+/* ---------- video mode: intro card, ten chapters on their voice lengths, outro ---------- */
+const INTRO = 3.5, GAP = 0.8, OUTRO = 7;
+function videoPlan(){ const d = (q.get('d')||'').split(',').map(Number).filter(x=>x>0);
+  const plan=[]; let t=INTRO; for(let i=0;i<N;i++){ const len=(d[i]||30)+GAP; plan.push({i, at:t, len}); t+=len; } return { plan, end:t+OUTRO }; }
+window.__plan = videoPlan;
+function runVideo(){ document.body.classList.add('video'); fit(); $('#mark').remove();
+  const { plan, end } = videoPlan(); const t0 = performance.now(); window.__t0 = t0;
+  $('#cardIn').classList.add('on'); let shown=-1;
+  const iv = setInterval(()=>{ const t=(performance.now()-t0)/1000;
+    let k=-1; plan.forEach(p=>{ if(t>=p.at) k=p.i; });
+    if(k!==shown && k>=0){ shown=k; $('#cardIn').classList.remove('on'); go(k); }
+    if(t>=end-OUTRO && !$('#cardOut').classList.contains('on')){ $('#cardOut').classList.add('on'); stopTimers(); clearInterval(loopTimer); }
+    if(t>=end){ clearInterval(iv); window.__done=true; } }, 30); }
+
+/* when embedded, tell the page how tall the tour is so its frame never scrolls */
+function report(){ if (parent !== window) parent.postMessage({ tkTourHeight: document.querySelector('.tour').offsetHeight + 8 }, '*'); }
+addEventListener('resize', report); new ResizeObserver(report).observe(document.querySelector('.tour'));
+if (q.get('lang') == null && parent !== window) addEventListener('message', e => { if (e.data && e.data.tkLang) setLang(e.data.tkLang); });
+
+setLang(LANG); fit();
+scenes[0].classList.add('active'); runLoop(1);
+if (VIDEO) { $('#mark').style.display='block'; addEventListener('load', ()=>setTimeout(runVideo, 1500)); }
+</script>
+</body>
+</html>
