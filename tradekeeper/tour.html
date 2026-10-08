@@ -635,9 +635,13 @@ function speak(){ vo.pause(); $('#vbar').style.width='0';
   if (VIDEO || !soundOn || !started) return;
   vo.src = src(cur+1); vo.currentTime = 0; vo.play().catch(()=>{}); }
 vo.addEventListener('timeupdate', ()=>{ if(vo.duration) $('#vbar').style.width = (vo.currentTime/vo.duration*100)+'%'; });
-vo.addEventListener('ended', ()=>{ $('#vbar').style.width='100%'; });
+/* when a chapter's voice finishes, carry on to the next one by itself, so the
+   tour plays through like a presentation; arrows/dots still skip around */
+let autoNext = 0;
+vo.addEventListener('ended', ()=>{ $('#vbar').style.width='100%';
+  if (!VIDEO && soundOn && cur < N-1) autoNext = setTimeout(()=>go(cur+1), 1400); });
 
-function go(n){ cur = (n+N)%N; scenes.forEach((s,i)=>s.classList.toggle('active', i===cur));
+function go(n){ clearTimeout(autoNext); cur = (n+N)%N; scenes.forEach((s,i)=>s.classList.toggle('active', i===cur));
   $$('#dots button')[cur].classList.add('seen'); text(); runLoop(cur+1); speak(); }
 
 /* ---------- website controls ---------- */
@@ -646,7 +650,7 @@ function begin(){ if(started) return; started=true; $('#start').classList.add('g
 $('#start').onclick = ()=>{ begin(); go(cur); };
 $('#next').onclick = ()=>{ begin(); go(cur+1); };
 $('#prev').onclick = ()=>{ begin(); go(cur-1); };
-$('#mute').onclick = ()=>{ soundOn=!soundOn; $('#mute').textContent = soundOn?'🔊':'🔇'; $('#mute').classList.toggle('on',!soundOn); if(!soundOn) vo.pause(); else speak(); };
+$('#mute').onclick = ()=>{ soundOn=!soundOn; $('#mute').textContent = soundOn?'🔊':'🔇'; $('#mute').classList.toggle('on',!soundOn); if(!soundOn){ vo.pause(); clearTimeout(autoNext); } else speak(); };
 $$('.langs button').forEach(b=>b.onclick=()=>{ setLang(b.dataset.lang); speak(); });
 addEventListener('keydown', e=>{ if(VIDEO) return; const fwd = LANG==='ar' ? 'ArrowLeft' : 'ArrowRight', back = LANG==='ar' ? 'ArrowRight' : 'ArrowLeft';
   if(e.key===fwd){ begin(); go(cur+1); } if(e.key===back){ begin(); go(cur-1); } });

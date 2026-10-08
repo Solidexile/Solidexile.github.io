@@ -443,9 +443,18 @@
   .tk .btn.ghost:hover { background: var(--tk-wash); border-color: var(--tk); }
   .tk-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
   .tk-tour { width: 100%; height: 560px; border: 0; display: block; background: transparent; }
-  .tk-trailer { margin-top: 26px; border-radius: 16px; overflow: hidden; border: 1px solid #2b3a5c; background: #000; }
-  .tk-trailer video { display: block; width: 100%; height: auto; }
-  .tk-trailer[hidden] { display: none; }
+  /* The trailer opens in a centred player sized to the screen, not as a
+     full-width box in the page - inline at 1120px it was too wide to watch
+     without going fullscreen. */
+  .tk-modal { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 20px;
+    background: rgba(4, 7, 14, .86); backdrop-filter: blur(4px); }
+  .tk-modal[hidden] { display: none; }
+  .tk-modal .box { position: relative; width: min(960px, 100%, calc((100vh - 120px) * 16 / 9)); }
+  .tk-modal video { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: 14px; background: #000;
+    border: 1px solid #2b3a5c; box-shadow: 0 30px 90px rgba(0, 0, 0, .6); }
+  .tk-modal .close { position: absolute; top: -46px; right: 0; width: 38px; height: 38px; border-radius: 50%;
+    border: 1px solid #34344A; background: #16203a; color: #fff; font-size: 18px; cursor: pointer; }
+  .tk-modal .close:hover { background: #4DA3FF; color: #06244a; }
 </style>
 </head>
 <body>
@@ -634,8 +643,11 @@
         </div>
       </div>
 
-      <div class="tk-trailer" id="tk-trailer" hidden>
-        <video src="tradekeeper/TradeKeeper-Trailer.mp4" controls preload="none" playsinline></video>
+      <div class="tk-modal" id="tk-trailer" hidden role="dialog" aria-label="TradeKeeper trailer">
+        <div class="box">
+          <button class="close" type="button" aria-label="Close">&#x2715;</button>
+          <video src="tradekeeper/TradeKeeper-Trailer.mp4" controls preload="none" playsinline></video>
+        </div>
       </div>
 
       <div class="reveal" style="margin-top:26px">
@@ -905,13 +917,16 @@
       frame.style.height = e.data.tkTourHeight + "px";
     }
   });
-  var btn = document.getElementById("tk-trailer-btn"), box = document.getElementById("tk-trailer");
-  btn.addEventListener("click", function () {
-    box.hidden = false;
-    var v = box.querySelector("video");
-    v.play().catch(function () {});
-    box.scrollIntoView({ behavior: "smooth", block: "center" });
-  });
+  var btn = document.getElementById("tk-trailer-btn"), box = document.getElementById("tk-trailer"),
+      v = box.querySelector("video");
+  // <main> is its own stacking layer below the sticky header, so the player
+  // is lifted out to <body> to sit above everything.
+  document.body.appendChild(box);
+  function close() { v.pause(); box.hidden = true; }
+  btn.addEventListener("click", function () { box.hidden = false; v.play().catch(function () {}); });
+  box.querySelector(".close").addEventListener("click", close);
+  box.addEventListener("click", function (e) { if (e.target === box) close(); });
+  addEventListener("keydown", function (e) { if (e.key === "Escape" && !box.hidden) close(); });
 })();
 </script>
 </body>
