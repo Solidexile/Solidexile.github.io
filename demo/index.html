@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TradeKeeper — Book a free demo</title>
+<meta name="description" content="Point of sale, stock, dollars & lira and accounting in one system that works offline. One-time purchase, no monthly fees. Book a free demo.">
+<meta property="og:title" content="TradeKeeper — Book a free demo">
+<meta property="og:description" content="Run your whole shop from one system. Works offline, USD & LBP, Arabic/French/English invoices, no monthly fees.">
+<meta property="og:image" content="https://solidexile.github.io/tradekeeper/poster.jpg">
+<!-- Google tag (Google Ads account 293-366-5499) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18508706976"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18508706976');
+</script>
+<style>
+  /* Landing page for the TradeKeeper YouTube ad: one job - get a demo request.
+     Arabic / English / French, form + WhatsApp, both counted as Ads conversions. */
+  :root{
+    --blue:#4DA3FF; --blue-d:#2166ac; --blue-l:#8fc6ff;
+    --ground:#0b1120; --ground2:#0e1526; --surf:#16203a; --surf2:#1d2a48;
+    --line:#2b3a5c; --ink:#eef3fb; --ink2:#a7b7d2; --ink3:#7589aa;
+    --good:#34d399; --amber:#f5b042; --wa:#25D366; --bad:#ff6b6b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  html,body{overflow-x:hidden;overflow-x:clip}
+  body{background:var(--ground);color:var(--ink);font-family:'Segoe UI',system-ui,-apple-system,Roboto,'Noto Sans Arabic',Tahoma,Arial,sans-serif;line-height:1.5;font-size:17px}
+  a{color:inherit}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+  header{position:sticky;top:0;z-index:10;background:rgba(11,17,32,.86);backdrop-filter:blur(10px);border-bottom:1px solid rgba(43,58,92,.6)}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:62px;gap:12px}
+  .brand{font-weight:900;font-size:22px;letter-spacing:-.02em;text-decoration:none;white-space:nowrap}
+  .brand .t{color:var(--blue)}
+  .brand small{font-weight:600;font-size:12px;color:var(--ink3);margin-inline-start:6px;letter-spacing:0}
+  .langs{display:flex;gap:4px;background:var(--surf);border:1px solid var(--line);border-radius:999px;padding:3px}
+  .langs button{border:0;background:none;color:var(--ink2);font:inherit;font-size:14px;font-weight:700;padding:5px 11px;border-radius:999px;cursor:pointer}
+  .langs button.on{background:var(--blue);color:#06101f}
+
+  .hero{padding:56px 0 40px;background:radial-gradient(900px 520px at 50% 0%, rgba(77,163,255,.18), transparent 70%)}
+  .hero .grid{display:grid;grid-template-columns:1.05fr 1fr;gap:44px;align-items:center}
+  .kick{display:inline-block;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);background:rgba(77,163,255,.12);border:1px solid rgba(77,163,255,.3);padding:5px 12px;border-radius:999px;margin-bottom:18px}
+  h1{font-size:clamp(34px,5.2vw,58px);line-height:1.06;letter-spacing:-.03em;font-weight:900}
+  h1 .am{color:var(--amber)}
+  .lead{margin-top:18px;font-size:clamp(17px,1.9vw,20px);color:var(--ink2);max-width:560px}
+  .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:0;border-radius:12px;padding:15px 22px;font:inherit;font-weight:800;font-size:17px;text-decoration:none;cursor:pointer;transition:transform .15s, filter .15s}
+  .btn:hover{transform:translateY(-1px);filter:brightness(1.07)}
+  .btn.primary{background:var(--blue);color:#06101f;box-shadow:0 10px 30px rgba(77,163,255,.3)}
+  .btn.wa{background:var(--wa);color:#04210f}
+  .btn svg{width:20px;height:20px;flex:none}
+  .trust{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;color:var(--ink2);font-size:15px}
+  .trust span::before{content:"✓";color:var(--good);font-weight:900;margin-inline-end:7px}
+
+  .video{direction:ltr;position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.5);background:#000;aspect-ratio:16/9}
+  .video video{width:100%;height:100%;display:block;object-fit:cover}
+  .video .play{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:flex-start;padding:14px;border:0;background:linear-gradient(0deg,rgba(0,0,0,.45),transparent 45%);cursor:pointer}
+  /* bottom corner, so it doesn't cover the logo on the poster */
+  .video .play i{width:58px;height:58px;border-radius:50%;background:var(--blue);display:grid;place-items:center;box-shadow:0 10px 40px rgba(77,163,255,.5)}
+  .video .play i::after{content:"";border-left:19px solid #06101f;border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:5px}
+  .video .len{position:absolute;bottom:12px;inset-inline-end:12px;background:rgba(0,0,0,.65);font-size:13px;font-weight:700;padding:3px 8px;border-radius:6px}
+
+  section{padding:56px 0}
+  h2{font-size:clamp(28px,3.6vw,40px);letter-spacing:-.02em;line-height:1.12;font-weight:900;text-align:center}
+  .sub{color:var(--ink2);text-align:center;margin:12px auto 0;max-width:640px}
+  .feats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
+  .feat{background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:22px}
+  .feat .ic{width:44px;height:44px;border-radius:12px;background:rgba(77,163,255,.14);display:grid;place-items:center;font-size:22px;margin-bottom:14px}
+  .feat h3{font-size:19px;font-weight:800;margin-bottom:6px}
+  .feat p{color:var(--ink2);font-size:15.5px}
+
+  .yours{background:linear-gradient(180deg,var(--ground2),var(--ground));border-block:1px solid rgba(43,58,92,.6)}
+  .yours .row{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:28px}
+  .pill{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.35);color:var(--ink);border-radius:999px;padding:11px 18px;font-weight:700}
+  .pill::before{content:"✓";color:var(--good);font-weight:900;margin-inline-end:8px}
+
+  .book .card{max-width:640px;margin:32px auto 0;background:var(--surf);border:1px solid var(--line);border-radius:20px;padding:28px;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+  form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .f{display:flex;flex-direction:column;gap:6px}
+  .f.full{grid-column:1/-1}
+  label{font-size:14px;font-weight:700;color:var(--ink2)}
+  label .opt{font-weight:500;color:var(--ink3)}
+  input,select,textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--ground2);border:1px solid var(--line);border-radius:10px;padding:12px 13px;width:100%}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:transparent}
+  textarea{min-height:84px;resize:vertical}
+  .f.full .btn{width:100%;margin-top:4px}
+  .note{font-size:13px;color:var(--ink3);text-align:center;grid-column:1/-1}
+  .err{color:var(--bad);font-size:14px;text-align:center;grid-column:1/-1;display:none}
+  .or{display:flex;align-items:center;gap:12px;color:var(--ink3);font-size:14px;margin:22px 0 14px}
+  .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+  .card .btn.wa{width:100%}
+  .thanks{display:none;text-align:center}
+  .thanks .big{font-size:52px}
+  .thanks h3{font-size:26px;font-weight:900;margin:6px 0 8px}
+  .thanks p{color:var(--ink2);margin-bottom:20px}
+  .done form,.done .or,.done .wa-alt{display:none}
+  .done .thanks{display:block}
+
+  footer{padding:30px 0 90px;color:var(--ink3);font-size:14px;text-align:center}
+  footer a{color:var(--ink2)}
+  footer [dir=ltr]{white-space:nowrap;unicode-bidi:isolate}
+
+  /* floating WhatsApp on phones */
+  .fab{position:fixed;bottom:16px;inset-inline-end:16px;z-index:20;width:58px;height:58px;border-radius:50%;background:var(--wa);display:grid;place-items:center;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+  .fab svg{width:30px;height:30px}
+
+  [dir=rtl] body{font-size:18px}
+  [dir=rtl] h1,[dir=rtl] h2{letter-spacing:0}
+
+  @media (max-width:880px){
+    .hero{padding-top:34px}
+    .hero .grid{grid-template-columns:1fr;gap:30px}
+    .feats{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:560px){
+    .feats{grid-template-columns:1fr}
+    form{grid-template-columns:1fr}
+    .book .card{padding:20px}
+    .brand small{display:none}
+    .ctas .btn{flex:1 1 100%}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="/"><span class="t">Trade</span>Keeper<small>by Solidify</small></a>
+    <div class="langs" role="group" aria-label="Language">
+      <button data-l="ar">ع</button><button data-l="en">EN</button><button data-l="fr">FR</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="wrap grid">
+      <div>
+        <span class="kick" data-t="kick"></span>
+        <h1 data-t="h1"></h1>
+        <p class="lead" data-t="lead"></p>
+        <div class="ctas">
+          <a class="btn primary" href="#book" data-t="cta"></a>
+          <a class="btn wa" data-wa href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg><span data-t="wa"></span></a>
+        </div>
+        <div class="trust"><span data-t="t1"></span><span data-t="t2"></span><span data-t="t3"></span></div>
+      </div>
+      <div class="video">
+        <video id="trailer" src="../tradekeeper/TradeKeeper-Trailer.mp4" poster="../tradekeeper/poster.jpg" preload="none" playsinline></video>
+        <button class="play" id="playBtn" aria-label="Play"><i></i></button>
+        <span class="len">1:19</span>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <h2 data-t="fh"></h2>
+      <p class="sub" data-t="fs"></p>
+      <div class="feats">
+        <div class="feat"><div class="ic">🧾</div><h3 data-t="f1h"></h3><p data-t="f1p"></p></div>
+        <div class="feat"><div class="ic">📦</div><h3 data-t="f2h"></h3><p data-t="f2p"></p></div>
+        <div class="feat"><div class="ic">💵</div><h3 data-t="f3h"></h3><p data-t="f3p"></p></div>
+        <div class="feat"><div class="ic">📊</div><h3 data-t="f4h"></h3><p data-t="f4p"></p></div>
+        <div class="feat"><div class="ic">🌐</div><h3 data-t="f5h"></h3><p data-t="f5p"></p></div>
+        <div class="feat"><div class="ic">🏬</div><h3 data-t="f6h"></h3><p data-t="f6p"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="yours">
+    <div class="wrap">
+      <h2 data-t="yh"></h2>
+      <div class="row"><span class="pill" data-t="y1"></span><span class="pill" data-t="y2"></span><span class="pill" data-t="y3"></span></div>
+    </div>
+  </section>
+
+  <section class="book" id="book">
+    <div class="wrap">
+      <h2 data-t="bh"></h2>
+      <p class="sub" data-t="bs"></p>
+      <div class="card" id="card">
+        <form id="form" novalidate>
+          <div class="f"><label for="name" data-t="lName"></label><input id="name" name="name" autocomplete="name" required></div>
+          <div class="f"><label for="biz" data-t="lBiz"></label><input id="biz" name="business" autocomplete="organization" required></div>
+          <div class="f"><label for="phone" data-t="lPhone"></label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+961 …" required></div>
+          <div class="f"><label for="type" data-t="lType"></label>
+            <select id="type" name="type" required>
+              <option value="" data-t="o0"></option>
+              <option value="Shop / retail" data-t="o1"></option>
+              <option value="Wholesale / distribution" data-t="o2"></option>
+              <option value="Restaurant / cafe" data-t="o3"></option>
+              <option value="Pharmacy" data-t="o4"></option>
+              <option value="Other" data-t="o5"></option>
+            </select></div>
+          <div class="f"><label for="branches" data-t="lBranches"></label>
+            <select id="branches" name="branches">
+              <option value="1">1</option><option value="2-3">2–3</option><option value="4+">4+</option>
+            </select></div>
+          <div class="f"><label for="city" data-t="lCity"></label><input id="city" name="city" autocomplete="address-level2"></div>
+          <div class="f full"><label for="msg" data-t="lMsg"></label><textarea id="msg" name="message"></textarea></div>
+          <p class="err" id="err"></p>
+          <div class="f full"><button class="btn primary" type="submit" id="send" data-t="send"></button></div>
+          <p class="note" data-t="privacy"></p>
+        </form>
+        <div class="or" data-t="or"></div>
+        <a class="btn wa wa-alt" data-wa href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg><span data-t="waLong"></span></a>
+        <div class="thanks">
+          <div class="big">✅</div>
+          <h3 data-t="thH"></h3>
+          <p data-t="thP"></p>
+          <a class="btn wa" data-wa href="#"><span data-t="thWa"></span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">TradeKeeper · <a href="/">Solidify</a> · <a href="mailto:hwmoubarak@gmail.com">hwmoubarak@gmail.com</a> · <a data-wa href="#" dir="ltr">+961 71 370 994</a></div>
+</footer>
+
+<a class="fab" data-wa href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="#04210f"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg></a>
+
+<script>
+/* ---- settings ---- */
+const WHATSAPP = '96171370994';                            // international format, no +
+const FORM_ENDPOINT = 'https://formsubmit.co/ajax/hwmoubarak@gmail.com';   // emails each request
+const ADS = 'AW-18508706976';
+// Conversion label from Google Ads (Goals -> Conversions -> "Submit lead form").
+// A WhatsApp tap counts as the same lead: in Lebanon most people would rather message than fill a form.
+const CONV = { lead: '_bBsCKb6o5odEKDp0flE', whatsapp: '_bBsCKb6o5odEKDp0flE' };
+
+const T = {
+  en:{ dir:'ltr', title:'TradeKeeper — Book a free demo',
+    kick:'For shops, wholesalers & restaurants in Lebanon',
+    h1:'Stop closing the shop at <span class="am">11 PM.</span>',
+    lead:'Sales, stock, dollars & lira and your books — in one system that keeps working when the power or the internet doesn’t.',
+    cta:'Book a free demo', wa:'WhatsApp us',
+    t1:'Works offline', t2:'USD & LBP', t3:'No monthly fees',
+    fh:'Everything your business runs on. One system.', fs:'Built for how business actually works here.',
+    f1h:'Sell in seconds', f1p:'Scan, pay, print the receipt. No internet needed at the counter.',
+    f2h:'Always know your stock', f2p:'Every sale updates your stock and flags what to reorder.',
+    f3h:'Dollars & lira, side by side', f3p:'Take payment in either. Every report adds up to one clear number.',
+    f4h:'Books that keep themselves', f4p:'Profit, VAT, who owes you and who you owe — ready when you ask.',
+    f5h:'Invoices in your language', f5p:'Arabic, French or English, with your business name on top.',
+    f6h:'Grows with you', f6p:'Add a till or a branch. Everyone works from the same live numbers.',
+    yh:'And it’s yours.', y1:'Runs on your own computers', y2:'Your data stays with you', y3:'No monthly fees',
+    bh:'Book your free demo', bs:'Leave your details and we’ll contact you on WhatsApp to set a time — at your shop or online.',
+    lName:'Your name', lBiz:'Business name', lPhone:'WhatsApp / phone', lType:'Type of business',
+    o0:'Choose…', o1:'Shop / retail', o2:'Wholesale / distribution', o3:'Restaurant / café', o4:'Pharmacy', o5:'Other',
+    lBranches:'Number of branches', lCity:'City <span class="opt">(optional)</span>', lMsg:'Anything we should know? <span class="opt">(optional)</span>',
+    send:'Book my free demo', sending:'Sending…',
+    privacy:'We only use your details to contact you about TradeKeeper.',
+    or:'or', waLong:'Message us on WhatsApp',
+    thH:'Thank you! We got your request.', thP:'We’ll contact you on WhatsApp soon. Want to talk now?', thWa:'Chat on WhatsApp now',
+    errReq:'Please fill in your name, business, phone and type of business.',
+    errSend:'Couldn’t send just now. Please message us on WhatsApp instead.',
+    waText:'Hi! I saw the TradeKeeper ad and I’d like a free demo.' },
+  ar:{ dir:'rtl', title:'تريدكيبر — احجز عرضاً مجانياً',
+    kick:'للمحلات وتجّار الجملة والمطاعم في لبنان',
+    h1:'كفى إغلاق المحل <span class="am">الساعة ١١ ليلاً.</span>',
+    lead:'المبيعات والمخزون والدولار والليرة وحساباتك — في نظام واحد يبقى شغّالاً حتى لو انقطعت الكهرباء أو الإنترنت.',
+    cta:'احجز عرضاً مجانياً', wa:'راسلنا على واتساب',
+    t1:'يعمل بدون إنترنت', t2:'دولار وليرة', t3:'بدون اشتراك شهري',
+    fh:'كل ما يحتاجه عملك. في نظام واحد.', fs:'مصمَّم على طريقة العمل الحقيقية هنا.',
+    f1h:'بيع خلال ثوانٍ', f1p:'امسح، ادفع، واطبع الإيصال. لا حاجة للإنترنت على الصندوق.',
+    f2h:'اعرف مخزونك دائماً', f2p:'كل عملية بيع تحدّث المخزون وتنبّهك لما يجب إعادة طلبه.',
+    f3h:'الدولار والليرة جنباً إلى جنب', f3p:'اقبض بأيٍّ منهما، وكل تقرير يعطيك رقماً واحداً واضحاً.',
+    f4h:'حسابات تُنظَّم وحدها', f4p:'الأرباح، الضريبة، من يدين لك ولمن تدين — جاهزة متى طلبتها.',
+    f5h:'فواتير بلغتك', f5p:'بالعربية أو الفرنسية أو الإنكليزية، مع اسم مؤسستك في الأعلى.',
+    f6h:'ينمو معك', f6p:'أضف صندوقاً أو فرعاً، والجميع يعمل على الأرقام نفسها مباشرة.',
+    yh:'والنظام ملكك.', y1:'يعمل على أجهزتك', y2:'بياناتك تبقى معك', y3:'بدون اشتراك شهري',
+    bh:'احجز عرضك المجاني', bs:'اترك معلوماتك وسنتواصل معك على واتساب لتحديد موعد — في محلك أو أونلاين.',
+    lName:'اسمك', lBiz:'اسم المؤسسة', lPhone:'واتساب / هاتف', lType:'نوع العمل',
+    o0:'اختر…', o1:'محل / تجزئة', o2:'جملة / توزيع', o3:'مطعم / مقهى', o4:'صيدلية', o5:'غير ذلك',
+    lBranches:'عدد الفروع', lCity:'المدينة <span class="opt">(اختياري)</span>', lMsg:'هل من شيء تودّ إخبارنا به؟ <span class="opt">(اختياري)</span>',
+    send:'احجز عرضي المجاني', sending:'جارٍ الإرسال…',
+    privacy:'نستخدم معلوماتك فقط للتواصل معك بخصوص تريدكيبر.',
+    or:'أو', waLong:'راسلنا على واتساب',
+    thH:'شكراً! وصلنا طلبك.', thP:'سنتواصل معك على واتساب قريباً. تريد التحدث الآن؟', thWa:'تحدّث معنا على واتساب الآن',
+    errReq:'يرجى إدخال اسمك واسم المؤسسة ورقم الهاتف ونوع العمل.',
+    errSend:'تعذّر الإرسال الآن. يرجى مراسلتنا على واتساب.',
+    waText:'مرحباً! شاهدت إعلان تريدكيبر وأودّ حجز عرض مجاني.' },
+  fr:{ dir:'ltr', title:'TradeKeeper — Réservez une démo gratuite',
+    kick:'Pour les commerces, grossistes et restaurants au Liban',
+    h1:'Arrêtez de fermer la boutique <span class="am">à 23 h.</span>',
+    lead:'Ventes, stock, dollars et livres libanaises, et votre comptabilité — dans un seul système qui continue de fonctionner même sans courant ni internet.',
+    cta:'Réserver une démo gratuite', wa:'Écrivez-nous sur WhatsApp',
+    t1:'Fonctionne hors ligne', t2:'USD et LBP', t3:'Sans abonnement mensuel',
+    fh:'Tout ce dont votre commerce a besoin. Un seul système.', fs:'Pensé pour la réalité du commerce ici.',
+    f1h:'Vendez en quelques secondes', f1p:'Scannez, encaissez, imprimez le ticket. Pas besoin d’internet en caisse.',
+    f2h:'Votre stock, toujours à jour', f2p:'Chaque vente met le stock à jour et signale ce qu’il faut recommander.',
+    f3h:'Dollars et livres, côte à côte', f3p:'Encaissez dans l’une ou l’autre. Chaque rapport donne un seul chiffre clair.',
+    f4h:'Une comptabilité qui se tient seule', f4p:'Bénéfice, TVA, qui vous doit et ce que vous devez — prêts quand vous voulez.',
+    f5h:'Des factures dans votre langue', f5p:'En arabe, en français ou en anglais, avec le nom de votre entreprise en tête.',
+    f6h:'Évolue avec vous', f6p:'Ajoutez une caisse ou une succursale. Tout le monde voit les mêmes chiffres en direct.',
+    yh:'Et il est à vous.', y1:'Tourne sur vos propres ordinateurs', y2:'Vos données restent chez vous', y3:'Sans abonnement mensuel',
+    bh:'Réservez votre démo gratuite', bs:'Laissez vos coordonnées et nous vous contacterons sur WhatsApp pour fixer un rendez-vous — en boutique ou en ligne.',
+    lName:'Votre nom', lBiz:'Nom de l’entreprise', lPhone:'WhatsApp / téléphone', lType:'Type d’activité',
+    o0:'Choisir…', o1:'Boutique / détail', o2:'Gros / distribution', o3:'Restaurant / café', o4:'Pharmacie', o5:'Autre',
+    lBranches:'Nombre de succursales', lCity:'Ville <span class="opt">(facultatif)</span>', lMsg:'Quelque chose à nous dire ? <span class="opt">(facultatif)</span>',
+    send:'Réserver ma démo gratuite', sending:'Envoi…',
+    privacy:'Vos coordonnées servent uniquement à vous contacter au sujet de TradeKeeper.',
+    or:'ou', waLong:'Écrivez-nous sur WhatsApp',
+    thH:'Merci ! Nous avons bien reçu votre demande.', thP:'Nous vous contacterons bientôt sur WhatsApp. Vous voulez en parler maintenant ?', thWa:'Discuter sur WhatsApp',
+    errReq:'Veuillez indiquer votre nom, votre entreprise, votre téléphone et votre type d’activité.',
+    errSend:'Envoi impossible pour le moment. Écrivez-nous plutôt sur WhatsApp.',
+    waText:'Bonjour ! J’ai vu la publicité TradeKeeper et j’aimerais une démo gratuite.' },
+};
+
+let L = 'en';
+function setLang(l){
+  L = T[l] ? l : 'en'; const t = T[L];
+  document.documentElement.lang = L; document.documentElement.dir = t.dir; document.title = t.title;
+  document.querySelectorAll('[data-t]').forEach(e => { const v = t[e.dataset.t]; if (v != null) e.innerHTML = v; });
+  document.querySelectorAll('.langs button').forEach(b => b.classList.toggle('on', b.dataset.l === L));
+  const wa = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(t.waText);
+  document.querySelectorAll('[data-wa]').forEach(a => { a.href = wa; a.target = '_blank'; a.rel = 'noopener'; });
+  try { localStorage.setItem('tk-lang', L); } catch (e) {}
+}
+document.querySelectorAll('.langs button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.l)));
+(function(){
+  let l = new URLSearchParams(location.search).get('lang');
+  if (!l) { try { l = localStorage.getItem('tk-lang'); } catch (e) {} }
+  if (!l) { const n = (navigator.language || '').slice(0, 2); l = n === 'ar' ? 'ar' : n === 'fr' ? 'fr' : 'en'; }
+  setLang(l);
+})();
+
+function conversion(kind){
+  if (CONV[kind]) gtag('event', 'conversion', { send_to: ADS + '/' + CONV[kind], value: 1.0, currency: 'USD' });
+  gtag('event', kind === 'lead' ? 'generate_lead' : 'whatsapp_click', { lang: L });
+}
+// count WhatsApp taps once per page view
+let waCounted = false;
+document.addEventListener('click', e => { if (e.target.closest('[data-wa]') && !waCounted) { waCounted = true; conversion('whatsapp'); } });
+
+const video = document.getElementById('trailer'), playBtn = document.getElementById('playBtn');
+playBtn.addEventListener('click', () => { video.controls = true; playBtn.remove(); video.play(); gtag('event', 'video_play'); });
+
+const form = document.getElementById('form'), err = document.getElementById('err'), send = document.getElementById('send');
+form.addEventListener('submit', async e => {
+  e.preventDefault(); err.style.display = 'none';
+  const d = Object.fromEntries(new FormData(form));
+  if (!d.name.trim() || !d.business.trim() || !d.phone.trim() || !d.type) { err.textContent = T[L].errReq; err.style.display = 'block'; return; }
+  send.disabled = true; send.textContent = T[L].sending;
+  try {
+    const r = await fetch(FORM_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ ...d, language: L, _subject: 'TradeKeeper demo request: ' + d.business, _template: 'table' }) });
+    if (!r.ok) throw new Error(r.status);
+    conversion('lead');
+    document.getElementById('card').classList.add('done');
+    document.getElementById('card').scrollIntoView({ block: 'center' });
+  } catch (x) {
+    err.textContent = T[L].errSend; err.style.display = 'block';
+    send.disabled = false; send.textContent = T[L].send;
+  }
+});
+</script>
+</body>
+</html>
