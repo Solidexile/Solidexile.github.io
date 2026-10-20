@@ -87,6 +87,7 @@
   label .opt{font-weight:500;color:var(--ink3)}
   input,select,textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--ground2);border:1px solid var(--line);border-radius:10px;padding:12px 13px;width:100%}
   input:focus,select:focus,textarea:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:transparent}
+  input.missing,select.missing{border-color:var(--bad);box-shadow:0 0 0 2px rgba(255,107,107,.25)}
   textarea{min-height:84px;resize:vertical}
   .f.full .btn{width:100%;margin-top:4px}
   .note{font-size:13px;color:var(--ink3);text-align:center;grid-column:1/-1}
@@ -142,7 +143,7 @@
         <p class="lead" data-t="lead"></p>
         <div class="ctas">
           <a class="btn primary" href="#book" data-t="cta"></a>
-          <a class="btn wa-ghost" data-wa href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg><span data-t="wa"></span></a>
+          <a class="btn wa-ghost" data-goform href="#book"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg><span data-t="wa"></span></a>
         </div>
         <div class="trust"><span data-t="t1"></span><span data-t="t2"></span><span data-t="t3"></span></div>
       </div>
@@ -198,19 +199,19 @@
             <select id="branches" name="branches">
               <option value="1">1</option><option value="2-3">2–3</option><option value="4+">4+</option>
             </select></div>
-          <div class="f"><label for="city" data-t="lCity"></label><input id="city" name="city" autocomplete="address-level2"></div>
+          <div class="f"><label for="city" data-t="lCity"></label><input id="city" name="city" autocomplete="address-level2" required></div>
           <div class="f full"><label for="msg" data-t="lMsg"></label><textarea id="msg" name="message"></textarea></div>
           <p class="err" id="err"></p>
           <div class="f full"><button class="btn primary" type="submit" id="send" data-t="send"></button></div>
           <p class="note" data-t="privacy"></p>
         </form>
         <div class="or" data-t="or"></div>
-        <a class="btn wa wa-alt" data-wa href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg><span data-t="waLong"></span></a>
+        <a class="btn wa wa-alt" data-wa-gated href="#book"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.8 11.8 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg><span data-t="waLong"></span></a>
         <div class="thanks">
           <div class="big">✅</div>
           <h3 data-t="thH"></h3>
           <p data-t="thP"></p>
-          <a class="btn wa" data-wa href="#"><span data-t="thWa"></span></a>
+          <a class="btn wa" data-wa-gated href="#book"><span data-t="thWa"></span></a>
         </div>
       </div>
     </div>
@@ -218,7 +219,7 @@
 </main>
 
 <footer>
-  <div class="wrap">TradeKeeper · <a href="/">Solidify</a> · <a href="mailto:hwmoubarak@gmail.com">hwmoubarak@gmail.com</a> · <a data-wa href="#" dir="ltr">+961 71 370 994</a></div>
+  <div class="wrap">TradeKeeper · <a href="/">Solidify</a> · <a href="mailto:hwmoubarak@gmail.com">hwmoubarak@gmail.com</a> · <a href="#book" data-goform dir="ltr">+961 71 370 994</a></div>
 </footer>
 
 
@@ -252,14 +253,16 @@ const T = {
     bh:'Book your free demo', bs:'Leave your details and we’ll contact you on WhatsApp to set a time — at your shop or online.',
     lName:'Your name', lBiz:'Business name', lPhone:'WhatsApp / phone', lType:'Type of business',
     o0:'Choose…', o1:'Shop / retail', o2:'Wholesale / distribution', o3:'Restaurant / café', o4:'Pharmacy', o5:'Other',
-    lBranches:'Number of branches', lCity:'City <span class="opt">(optional)</span>', lMsg:'Anything we should know? <span class="opt">(optional)</span>',
+    lBranches:'Number of branches', lCity:'Area / city', lMsg:'Anything we should know? <span class="opt">(optional)</span>',
     send:'Book my free demo', sending:'Sending…',
     privacy:'We only use your details to contact you about TradeKeeper.',
     or:'or', waLong:'Message us on WhatsApp',
     thH:'Thank you! We got your request.', thP:'We’ll contact you on WhatsApp soon. Want to talk now?', thWa:'Chat on WhatsApp now',
-    errReq:'Please fill in your name, business, phone and type of business.',
+    errReq:'Please fill in your name, business name, phone, type of business and area.',
+    errWa:'To message us on WhatsApp, first fill in your name, business name, type of business and area above.',
+    waIntro:'Hi, I’d like a TradeKeeper demo.', waName:'Name', waBiz:'Business', waType:'Type', waArea:'Area', waBranches:'Branches', waNote:'Note',
     errSend:'Couldn’t send just now. Please message us on WhatsApp instead.',
-    waText:'Hi, I’d like a TradeKeeper demo.\nMy business name: \nType (shop / wholesale / restaurant): \nArea: ' },
+  },
   ar:{ dir:'rtl', title:'تريدكيبر — احجز عرضاً مجانياً',
     kick:'للمحلات وتجّار الجملة والمطاعم في لبنان',
     h1:'كفى إغلاق المحل <span class="am">الساعة ١١ ليلاً.</span>',
@@ -277,14 +280,16 @@ const T = {
     bh:'احجز عرضك المجاني', bs:'اترك معلوماتك وسنتواصل معك على واتساب لتحديد موعد — في محلك أو أونلاين.',
     lName:'اسمك', lBiz:'اسم المؤسسة', lPhone:'واتساب / هاتف', lType:'نوع العمل',
     o0:'اختر…', o1:'محل / تجزئة', o2:'جملة / توزيع', o3:'مطعم / مقهى', o4:'صيدلية', o5:'غير ذلك',
-    lBranches:'عدد الفروع', lCity:'المدينة <span class="opt">(اختياري)</span>', lMsg:'هل من شيء تودّ إخبارنا به؟ <span class="opt">(اختياري)</span>',
+    lBranches:'عدد الفروع', lCity:'المنطقة / المدينة', lMsg:'هل من شيء تودّ إخبارنا به؟ <span class="opt">(اختياري)</span>',
     send:'احجز عرضي المجاني', sending:'جارٍ الإرسال…',
     privacy:'نستخدم معلوماتك فقط للتواصل معك بخصوص تريدكيبر.',
     or:'أو', waLong:'راسلنا على واتساب',
     thH:'شكراً! وصلنا طلبك.', thP:'سنتواصل معك على واتساب قريباً. تريد التحدث الآن؟', thWa:'تحدّث معنا على واتساب الآن',
-    errReq:'يرجى إدخال اسمك واسم المؤسسة ورقم الهاتف ونوع العمل.',
+    errReq:'يرجى إدخال اسمك واسم المؤسسة ورقم الهاتف ونوع العمل والمنطقة.',
+    errWa:'لتراسلنا على واتساب، عبّي أوّلاً اسمك واسم المحل ونوع الشغل والمنطقة فوق.',
+    waIntro:'مرحباً، بدي عرض لتريدكيبر.', waName:'الاسم', waBiz:'المحل', waType:'نوع الشغل', waArea:'المنطقة', waBranches:'عدد الفروع', waNote:'ملاحظة',
     errSend:'تعذّر الإرسال الآن. يرجى مراسلتنا على واتساب.',
-    waText:'مرحباً، بدي عرض لتريدكيبر.\nاسم المحل: \nنوع الشغل (محل / جملة / مطعم): \nالمنطقة: ' },
+  },
   fr:{ dir:'ltr', title:'TradeKeeper — Réservez une démo gratuite',
     kick:'Pour les commerces, grossistes et restaurants au Liban',
     h1:'Arrêtez de fermer la boutique <span class="am">à 23 h.</span>',
@@ -302,14 +307,16 @@ const T = {
     bh:'Réservez votre démo gratuite', bs:'Laissez vos coordonnées et nous vous contacterons sur WhatsApp pour fixer un rendez-vous — en boutique ou en ligne.',
     lName:'Votre nom', lBiz:'Nom de l’entreprise', lPhone:'WhatsApp / téléphone', lType:'Type d’activité',
     o0:'Choisir…', o1:'Boutique / détail', o2:'Gros / distribution', o3:'Restaurant / café', o4:'Pharmacie', o5:'Autre',
-    lBranches:'Nombre de succursales', lCity:'Ville <span class="opt">(facultatif)</span>', lMsg:'Quelque chose à nous dire ? <span class="opt">(facultatif)</span>',
+    lBranches:'Nombre de succursales', lCity:'Région / ville', lMsg:'Quelque chose à nous dire ? <span class="opt">(facultatif)</span>',
     send:'Réserver ma démo gratuite', sending:'Envoi…',
     privacy:'Vos coordonnées servent uniquement à vous contacter au sujet de TradeKeeper.',
     or:'ou', waLong:'Écrivez-nous sur WhatsApp',
     thH:'Merci ! Nous avons bien reçu votre demande.', thP:'Nous vous contacterons bientôt sur WhatsApp. Vous voulez en parler maintenant ?', thWa:'Discuter sur WhatsApp',
-    errReq:'Veuillez indiquer votre nom, votre entreprise, votre téléphone et votre type d’activité.',
+    errReq:'Veuillez indiquer votre nom, votre entreprise, votre téléphone, votre type d’activité et votre région.',
+    errWa:'Pour nous écrire sur WhatsApp, remplissez d’abord votre nom, le nom du commerce, le type d’activité et la région ci-dessus.',
+    waIntro:'Bonjour, je voudrais une démo de TradeKeeper.', waName:'Nom', waBiz:'Commerce', waType:'Type', waArea:'Région', waBranches:'Succursales', waNote:'Note',
     errSend:'Envoi impossible pour le moment. Écrivez-nous plutôt sur WhatsApp.',
-    waText:'Bonjour, je voudrais une démo de TradeKeeper.\nNom du commerce : \nType (boutique / gros / restaurant) : \nRégion : ' },
+  },
 };
 
 let L = 'en';
@@ -318,8 +325,6 @@ function setLang(l){
   document.documentElement.lang = L; document.documentElement.dir = t.dir; document.title = t.title;
   document.querySelectorAll('[data-t]').forEach(e => { const v = t[e.dataset.t]; if (v != null) e.innerHTML = v; });
   document.querySelectorAll('.langs button').forEach(b => b.classList.toggle('on', b.dataset.l === L));
-  const wa = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(t.waText);
-  document.querySelectorAll('[data-wa]').forEach(a => { a.href = wa; a.target = '_blank'; a.rel = 'noopener'; });
   try { localStorage.setItem('tk-lang', L); } catch (e) {}
 }
 document.querySelectorAll('.langs button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.l)));
@@ -334,9 +339,58 @@ function conversion(kind){
   if (CONV[kind]) gtag('event', 'conversion', { send_to: ADS + '/' + CONV[kind], value: 1.0, currency: 'USD' });
   gtag('event', kind === 'lead' ? 'generate_lead' : 'whatsapp_click', { lang: L });
 }
-// count WhatsApp taps once per page view
-let waCounted = false;
-document.addEventListener('click', e => { if (e.target.closest('[data-wa]') && !waCounted) { waCounted = true; conversion('whatsapp'); } });
+/* WhatsApp only opens once the visitor has told us who they are. Tapping a
+   pre-filled message and walking away (most of the first ad's "leads", plus
+   empty voice notes) is no longer possible: the message is built from the
+   form, and the button refuses until name, business, type and area are in. */
+function formData() { return Object.fromEntries(new FormData(document.getElementById('form'))); }
+
+function missingForWhatsApp(d) {
+  const bad = [];
+  if ((d.name || '').trim().length < 2) bad.push('name');
+  if ((d.business || '').trim().length < 3) bad.push('biz');
+  if (!d.type) bad.push('type');
+  if ((d.city || '').trim().length < 2) bad.push('city');
+  return bad;
+}
+
+function whatsappUrl(d) {
+  const t = T[L], typeLabel = (document.querySelector('#type option[value="' + CSS.escape(d.type) + '"]') || {}).textContent || d.type;
+  const lines = [t.waIntro, '', t.waName + ': ' + d.name.trim(), t.waBiz + ': ' + d.business.trim(),
+    t.waType + ': ' + typeLabel, t.waArea + ': ' + d.city.trim(), t.waBranches + ': ' + (d.branches || '1')];
+  if ((d.message || '').trim()) lines.push(t.waNote + ': ' + d.message.trim());
+  return 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(lines.join('\n'));
+}
+
+document.addEventListener('click', e => {
+  const go = e.target.closest('[data-goform]');
+  if (go) {
+    e.preventDefault();
+    document.getElementById('book').scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => document.getElementById('name').focus({ preventScroll: true }), 500);
+    return;
+  }
+
+  const gated = e.target.closest('[data-wa-gated]');
+  if (!gated) return;
+  e.preventDefault();
+
+  const d = formData(), bad = missingForWhatsApp(d);
+  const fields = { name: 'name', biz: 'biz', type: 'type', city: 'city' };
+  document.querySelectorAll('#form input, #form select').forEach(el => el.classList.remove('missing'));
+
+  if (bad.length) {
+    bad.forEach(k => document.getElementById(fields[k]).classList.add('missing'));
+    err.textContent = T[L].errWa; err.style.display = 'block';
+    document.getElementById(fields[bad[0]]).focus();
+    gtag('event', 'whatsapp_blocked', { lang: L, missing: bad.join(',') });
+    return;
+  }
+
+  err.style.display = 'none';
+  gtag('event', 'whatsapp_click', { lang: L });
+  window.open(whatsappUrl(d), '_blank', 'noopener');
+});
 
 const video = document.getElementById('trailer'), playBtn = document.getElementById('playBtn');
 playBtn.addEventListener('click', () => { video.controls = true; playBtn.remove(); video.play(); gtag('event', 'video_play'); });
@@ -345,7 +399,7 @@ const form = document.getElementById('form'), err = document.getElementById('err
 form.addEventListener('submit', async e => {
   e.preventDefault(); err.style.display = 'none';
   const d = Object.fromEntries(new FormData(form));
-  if (!d.name.trim() || !d.business.trim() || !d.phone.trim() || !d.type) { err.textContent = T[L].errReq; err.style.display = 'block'; return; }
+  if (!d.phone.trim() || missingForWhatsApp(d).length) { err.textContent = T[L].errReq; err.style.display = 'block'; return; }
   send.disabled = true; send.textContent = T[L].sending;
   try {
     const r = await fetch(FORM_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
