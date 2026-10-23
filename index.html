@@ -493,9 +493,15 @@
   .tk-hw { margin-top: 56px; }
   .tk-hw h3 { font-family: Archivo, sans-serif; font-weight: 800; font-size: clamp(1.5rem, 3vw, 2rem); letter-spacing: -.02em; margin: 10px 0 8px; }
   .tk-hw .lead { color: var(--ink-2); max-width: 640px; margin: 0 0 26px; }
-  .hw-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+  .hw-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
   @media (max-width: 980px) { .hw-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 520px) { .hw-grid { grid-template-columns: 1fr; } }
+  /* The cable card is wide: picture on the left, the lengths on the right. */
+  .hw-card.wide { grid-column: span 2; flex-direction: row; }
+  .hw-card.wide img { width: 46%; aspect-ratio: auto; height: 100%; min-height: 260px; }
+  .hw-card.wide .hw-opts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 980px) { .hw-card.wide { grid-column: 1 / -1; } }
+  @media (max-width: 640px) { .hw-card.wide { flex-direction: column; } .hw-card.wide img { width: 100%; height: auto; min-height: 0; aspect-ratio: 4 / 3; } .hw-card.wide .hw-opts { grid-template-columns: 1fr; } }
   .hw-card { display: flex; flex-direction: column; background: #0f1830; border: 1px solid #22304f; border-radius: 16px; overflow: hidden; }
   .hw-card img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; background: #fff; }
   .hw-body { display: flex; flex-direction: column; gap: 8px; padding: 16px 18px 18px; flex: 1; }
@@ -696,6 +702,20 @@
               <div class="hw-price"><small>from</small>$25</div>
             </div>
           </article>
+          <article class="hw-card wide">
+            <img src="tradekeeper/hardware/cable.jpg" alt="Cat6 Ethernet cable with RJ45 plug" width="800" height="600" loading="lazy">
+            <div class="hw-body">
+              <h4>Ethernet cable (Cat6)</h4>
+              <p>Wires your tills, printer and back office together on the shop network. Ready-made with plugs on both ends, or a full box for wiring the whole shop.</p>
+              <ul class="hw-opts">
+                <li><span>3&nbsp;m</span><b>$3</b></li>
+                <li><span>5&nbsp;m</span><b>$4</b></li>
+                <li><span>10&nbsp;m</span><b>$6</b></li>
+                <li><span>20&nbsp;m</span><b>$9</b></li>
+                <li><span>Box, 305&nbsp;m</span><b>$45</b></li>
+              </ul>
+            </div>
+          </article>
         </div>
         <div class="hw-foot reveal">
           <a class="btn" href="#contact">Ask about hardware</a>
@@ -705,7 +725,8 @@
           <a href="https://commons.wikimedia.org/wiki/File:All-in-One_Kassensystem_POSSUM16.jpg" rel="noopener">Kassensystem.experte</a>,
           <a href="https://commons.wikimedia.org/wiki/File:Para_%C3%87ekmecesi_(Cash_Drawer).jpg" rel="noopener">Paracekmecesi</a>,
           <a href="https://commons.wikimedia.org/wiki/File:Epson_TM-T88VI_Receipt_Printer.jpg" rel="noopener">TaurusEmerald</a>,
-          <a href="https://commons.wikimedia.org/wiki/File:Honeywell_4600g-8661.jpg" rel="noopener">Raimond Spekking</a>; cropped.
+          <a href="https://commons.wikimedia.org/wiki/File:Honeywell_4600g-8661.jpg" rel="noopener">Raimond Spekking</a>;
+          and (CC BY 4.0) <a href="https://commons.wikimedia.org/wiki/File:Patch_cable_with_RJ45_connector.jpg" rel="noopener">heimnetzwerke.net</a>; cropped.
           Pictures are for illustration; the exact model may differ.</p>
       </div>
     </div>
