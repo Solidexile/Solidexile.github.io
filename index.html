@@ -796,42 +796,18 @@
           </div>
 
           <div class="product-links reveal">
-            <!-- Tag is V1.0.0 with a capital V; GitHub tags are case-sensitive. -->
-            <a class="btn" href="https://github.com/Solidexile/Solidexile.github.io/releases/download/V1.0.0/pathkeeper-v1.0.0.apk">Download the beta</a>
-            <span class="pill">Android 7+ &middot; 50 MB</span>
+            <a class="btn" href="https://play.google.com/store/apps/details?id=com.pathkeeper.app" rel="noopener">Download</a>
+            <span class="pill">Android &middot; Google Play</span>
           </div>
           <!-- Filled in by the counter script. Starts empty and stays empty if
                either source is unreachable, so a failed fetch shows nothing
                rather than a broken "0 downloads". -->
           <p class="sitestats reveal" id="sitestats" hidden></p>
           <p class="fineprint reveal">
-            Direct download while PathKeeper finishes Google Play review.
-            <button class="linkish" type="button" id="install-toggle">How to install</button>
+            Also on Google Play: search &ldquo;PathKeeper&rdquo; by Solidify.
             &middot;
             <a href="https://solidexile.github.io/pathkeeper-privacy/">Privacy policy</a>
           </p>
-
-          <!-- Revealed automatically when the download starts. People abandon at
-               the security prompts because nothing tells them the prompts are
-               expected, so the steps appear at exactly the moment they hit them. -->
-          <div class="install" id="install">
-            <p class="install-lead">
-              Android shows two warnings for any app not installed from the Play Store. They are
-              expected here &mdash; PathKeeper is not on Play yet. Here is what you will see:
-            </p>
-            <ol class="steps-list">
-              <li><strong>&ldquo;This type of file can harm your device&rdquo;</strong> &mdash; tap <strong>Download anyway</strong>.</li>
-              <li>Open the downloaded file, from the notification or your <strong>Downloads</strong> folder.</li>
-              <li><strong>&ldquo;For your security, you can't install unknown apps from this source&rdquo;</strong> &mdash; tap <strong>Settings</strong>, turn on <strong>Allow from this source</strong>, then press back.</li>
-              <li>Tap <strong>Install</strong>.</li>
-              <li>If Play Protect says <strong>&ldquo;unsafe app blocked&rdquo;</strong> or offers to scan, choose <strong>More details</strong> &rarr; <strong>Install anyway</strong>.</li>
-              <li>Open PathKeeper. Nothing else is needed &mdash; there is no account to make.</li>
-            </ol>
-            <p class="install-note">
-              Wording varies a little by phone; Samsung says &ldquo;Install unknown apps&rdquo;. Stuck on any
-              step? Send a screenshot to <a href="mailto:hwmoubarak@gmail.com">hwmoubarak@gmail.com</a>.
-            </p>
-          </div>
         </div>
 
         <div class="shots reveal">
@@ -1034,39 +1010,6 @@
       cell.classList.remove("lit");
     });
   })();
-
-  /* Install steps. Shown automatically the moment the download starts, because
-     that is when the security prompts appear and when people give up. */
-  (function () {
-    var panel = document.getElementById("install");
-    var toggle = document.getElementById("install-toggle");
-    var download = document.querySelector('a.btn[href*=".apk"]');
-    if (!panel) return;
-
-    function show() {
-      panel.classList.add("show");
-    }
-
-    if (download) {
-      download.addEventListener("click", function () {
-        show();
-        // The click also starts the download, so give the browser a moment
-        // before moving the page under the user's finger.
-        setTimeout(function () {
-          panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        }, 350);
-      });
-    }
-
-    if (toggle) {
-      toggle.addEventListener("click", function () {
-        panel.classList.toggle("show");
-        if (panel.classList.contains("show")) {
-          panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        }
-      });
-    }
-  })();
 </script>
 
 <script>
@@ -1094,7 +1037,8 @@
 
   function paint() {
     var bits = [];
-    if (downloads !== null) bits.push(plural(downloads, "download", "downloads"));
+    // APK downloads only; Play installs are not counted here, so the figure is left out.
+    if (false && downloads !== null) bits.push(plural(downloads, "download", "downloads"));
     if (views !== null) bits.push(plural(views, "visit", "visits"));
     if (!bits.length) return;
     el.innerHTML = bits.join(" &middot; ");
@@ -1130,7 +1074,7 @@
       .catch(function () {});
 
     document.addEventListener("click", function (e) {
-      var a = e.target.closest && e.target.closest('a[href*=".apk"]');
+      var a = e.target.closest && e.target.closest('a[href*="play.google.com/store/apps/details?id=com.pathkeeper.app"], a[href*=".apk"]');
       if (!a || isLocal) return;
       try {
         navigator.sendBeacon(COUNTER_ENDPOINT, new Blob(
